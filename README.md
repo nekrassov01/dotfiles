@@ -3,5 +3,6 @@
 nekrassov01's dotfiles, managed with chezmoi
 
 ```sh
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/nekrassov01/dotfiles/main/install.sh)"
+/bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/nekrassov01/dotfiles/main/install.sh)"
+$HOME/.local/bin/chezmoi init "nekrassov01" --apply
 ```
