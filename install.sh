@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# inspired by https://github.com/twpayne/dotfiles/blob/master/install.sh
-
 set -eu
 
 ensure_chezmoi() {
@@ -23,5 +21,5 @@ ensure_chezmoi() {
 }
 
 ensure_chezmoi
-chezmoi=$(command -v chezmoi)
-exec "$chezmoi" init "nekrassov01" --apply
+export PATH="$HOME/.local/bin:$PATH"
+xcode-select --install
