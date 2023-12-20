@@ -1,0 +1,88 @@
+#!/bin/sh
+
+# load: helper
+if ! . "$HOME/.bash.init"; then
+  print_err "Load required settings failed."
+  exit 1
+fi
+
+# Get module lists by package manager tools: brew, asdf, pip, npm, pwsh (homemade), and code
+get_bundle() {
+  if has brew; then
+    print_info "Bundling brew"
+    if ! brew bundle dump --formula --tap --cask --force >/dev/null 2>&1; then
+      print_err "Bundling brew failed."
+    fi
+  fi
+
+  if has asdf; then
+    print_info "Bundling asdf"
+    if ! cat "$HOME/.tool-versions" >"Asdffile"; then
+      print_err "Bundling asdf failed."
+    fi
+  fi
+
+  if has pip; then
+    print_info "Bundling pip"
+    if ! pip freeze >"Pyfile"; then
+      print_err "Bundling pip failed."
+    fi
+  fi
+
+  if has npm; then
+    print_info "Bundling npm"
+    if ! npm -g list --depth=0 | sed -e '1d' -e 's/^.*\ //g' -e '/^$/d' >"Nodefile"; then
+      print_err "Bundling npm failed."
+    fi
+  fi
+
+  if has pwsh; then
+    print_info "Bundling pwsh"
+    if ! pwsh -c "Out-UserModule *>\$null"; then
+      print_err "Bundling pwsh failed."
+    fi
+  fi
+
+  if has code; then
+    print_info "Bundling code"
+    if ! code --list-extensions >"Codefile"; then
+      print_err "Bundling code failed."
+    fi
+  fi
+
+  if has dockutil; then
+    print_info "Bundling dock"
+    if ! dockutil --list | cut -f 2 | sed -e 's|file://||g' -e 's|/$||g' -e 's|%20| |g' >"Dockfile"; then
+      print_err "Bundling dock failed."
+    fi
+  fi
+}
+
+# Update module lists by package manager tools: brew, asdf, pip, npm, pwsh (homemade), and code
+sync_bundle() {
+  chk chezmoi
+  tool_dir="$(dirname "$(chezmoi source-path)")/tools"
+
+  if [ -z "$tool_dir" ]; then
+    print_err "Bundle dir not found" && return 1
+  fi
+
+  archive_dir="$tool_dir/.archive/$(date +%Y%m%d%H%M%S)"
+  mkdir -p "$archive_dir"
+  files="$(find "$tool_dir" -type d -name '.archive' -prune -o -type f -print)"
+
+  for file in $files; do
+    mv "$file" "$archive_dir/" 1>/dev/null
+  done
+  unset file files
+
+  cd "$tool_dir" || return 1
+
+  get_bundle
+
+  cd - >/dev/null 2>&1 || return 1
+  has tree && echo && tree -a "$tool_dir"
+}
+
+# run
+sync_bundle
