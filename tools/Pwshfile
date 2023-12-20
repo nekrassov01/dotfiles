@@ -1,0 +1,17 @@
+AWS.Tools.CertificateManager:4.1.478
+AWS.Tools.CloudFront:4.1.478
+AWS.Tools.Common:4.1.478
+AWS.Tools.EC2:4.1.478
+AWS.Tools.ElasticLoadBalancing:4.1.478
+AWS.Tools.ElasticLoadBalancingV2:4.1.478
+AWS.Tools.IdentityManagement:4.1.478
+AWS.Tools.Installer:1.0.2.4
+AWS.Tools.Route53:4.1.478
+AWS.Tools.S3:4.1.478
+AWS.Tools.SecurityToken:4.1.478
+AWS.Tools.SimpleSystemsManagement:4.1.478
+PackageManagement:1.4.8.1
+posh-git:1.1.0
+powershell-yaml:0.4.7
+PSReadLine:2.2.6
+PSScriptAnalyzer:1.21.0

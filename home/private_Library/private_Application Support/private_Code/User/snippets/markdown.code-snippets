@@ -1,0 +1,60 @@
+{
+  "Markdown code line": {
+    "prefix": "mline",
+    "body": [" ```$1``` "]
+  },
+  "Markdown code block": {
+    "prefix": "mcode",
+    "body": ["```$1", "", "```"]
+  },
+  "Markdown quote block": {
+    "prefix": "mqt",
+    "body": ["> $1"]
+  },
+  "Markdown table block": {
+    "prefix": "mt",
+    "body": ["|col1|col2|col3|", "|--|--|--|", "||||", "||||"]
+  },
+  "Markdown h1": {
+    "prefix": "mh1",
+    "body": ["# $1"]
+  },
+  "Markdown h2": {
+    "prefix": "mh2",
+    "body": ["## $1"]
+  },
+  "Markdown h3": {
+    "prefix": "mh3",
+    "body": ["### $1"]
+  },
+  "Markdown h4": {
+    "prefix": "mh4",
+    "body": ["#### $1"]
+  },
+  "Markdown checkbox": {
+    "prefix": "mcb",
+    "body": ["- [ ] $1"]
+  },
+  "Markdown evidence 1": {
+    "prefix": "mev1",
+    "body": ["## エビデンス", "```", "$1", "```"]
+  },
+  "Markdown evidence 2": {
+    "prefix": "mev2",
+    "body": ["## 作業前", "```", "$1", "```", "## 作業後", "```", "", "```"]
+  },
+  "Markdown evidence 3": {
+    "prefix": "mev3",
+    "body": [
+      "## $1",
+      "### 作業前",
+      "```",
+      "",
+      "```",
+      "### 作業後",
+      "```",
+      "",
+      "```"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+[alias]
+	s = status -s -b
+	aa = add .
+	c = clone --recursive
+	br = branch
+	co = checkout
+	l = log -n 20 --color --abbrev-commit --oneline
+	graph = log -n 20 --color --abbrev-commit --graph
+[credential "https://github.com"]
+	helper = osxkeychain
+[core]
+	editor = code --wait
+	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+	trustctime = false
+	precomposeunicode = true
+	quotepath = false
+	pager = LESSCHARSET=utf-8 less
+[init]
+	defaultbranch = main
+[apply]
+	whitespace = fix
+[color]
+	ui = auto
+[fetch]
+	prune = true
+[pull]
+	rebase = true
+[merge]
+	log = true
+[diff]
+	renames = copies
+[help]
+	autocorrect = 1
+[ghq]
+	root = ~/.repository

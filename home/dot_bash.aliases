@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+
+set-alias() {
+
+  # sudo
+  alias sudo='sudo '
+
+  # ls
+  # Defined in .bash.loader
+
+  # grep
+  alias grep='grep --color=auto'
+  alias fgrep='grep -F --color=auto'
+  alias egrep='grep -E --color=auto'
+
+  # clear host (Used to Windows)
+  alias cls='clear'
+
+  # cd
+  alias cd..='cd ..'
+  alias ..='cd ..'
+  alias ...='cd ../..'
+  alias ....='cd ../../..'
+  alias .....='cd ../../../..'
+  alias ~='cd ~'
+  alias -- -='cd - &> /dev/null'
+  alias doc='cd ~/Documents'
+  alias dl='cd ~/Downloads'
+  alias desk='cd ~/Desktop'
+
+  # cd working directory
+  alias box='cd $MY_BOX_DIR'
+  alias pj='cd $MY_PROJECT_DIR'
+  alias repo='cd $MY_REPOSITORY_DIR'
+
+  # cp,mv,rf
+  alias cp='cp -i -v'
+  alias mv='mv -i -v'
+  alias rf='rf -i -v'
+  alias cpr='cp -r -v'
+
+  # df,du
+  alias df='df -h'
+  alias du='du -h -c'
+  alias dfl='df -akh | head -n +1 && df -akh | tail -n +2 | sort -h'
+  alias dul='du -sh .[^.]* ./* 2> /dev/null | sort -hr'
+
+  # rename
+  has rename && alias rename='rename -v'
+
+  # hosts
+  alias hosts='sudo $EDITOR /etc/hosts'
+
+  # date
+  alias strdate="date +%Y%m%d"
+  alias strtime="date +%Y%m%d%H%M%S"
+
+  # Print prettier
+  alias path='echo -e ${PATH//:/\\n}'
+  alias pathman='echo -e ${MANPATH//:/\\n}'
+  alias ignorehist='echo -e ${HISTIGNORE//:/\\n}'
+  alias user='id -a | tr "," "\n"'
+  alias envs='env | sed -e "s/\=/$(color blue)\=$(color reset)/g" | sed -e "s/:/$(color red):$(color reset)/g" | sed -e "s/\//$(color yellow)\/$(color reset)/g" | sort'
+
+  # Get current user fullname for macOS
+  alias fullname='dscl . -read /Users/$(whoami) RealName | tail -1 | sed s/^\ //'
+
+  # Shortcut for debug
+  alias r='echo $?'
+
+  # brew
+  alias brewdeps="brew deps --tree --full-name --installed | grep -v '^\s*$'"
+
+  # Package manager update
+  has brew && alias brewup='brew -v update; brew -v upgrade; brew -v cleanup --prune=all; brew -v doctor'
+  has asdf && alias asdfup='brew -v upgrade asdf; asdf plugin update --all; asdf reshim'
+  has pip && alias pipup='pip install --upgrade pip; pip cache purge'
+  has npm && alias npmup='npm update -g npm; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm'
+  has pwsh && alias pwshup='pwsh -c Optimize-UserModule'
+  alias swup='sudo softwareupdate --install --all'
+  alias update='has brewup && brewup; has asdfup && asdfup; has pipup && pipup; has npmup && npmup; has pwsh && pwshup'
+
+  # Reload shell
+  alias reload='clear && exec $SHELL --login'
+  alias home='cd ~ && clear && exec $SHELL --login'
+
+  # networking
+  alias gip='curl checkip.amazonaws.com'
+  alias gipc='echo "$(curl -s checkip.amazonaws.com)/32"'
+  alias flush='dscacheutil -flushcache && killall -HUP mDNSResponder'
+
+  # Get and delete empty files and directories
+  alias emptget='find . -empty -ls'
+  alias emptdel='find . -empty -ls -delete'
+
+  # directory cleanup
+  alias dsscheck='find . -type f -name "*.DS_Store" -ls'
+  alias dssclean='find . -type f -name "*.DS_Store" -ls -delete'
+  alias attcheck='find . -exec xattr -pr {} +'
+  alias attclean='find . -exec xattr -cr {} +'
+  alias dirclean='dssclean && attclean'
+
+  # system cleanup
+  alias trashclean='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash'
+  alias cacheclean='sudo rm -rfv /System/Library/Caches/* /Library/Caches/* ~/Library/Caches/*'
+  alias logclean='sudo rm -rfv /private/var/log/asl/*.asl'
+  alias imgclean='sudo rm -rfv /private/var/vm/sleepimage'
+  alias lsclean='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder'
+  alias sqlclean="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+  alias spotclean='sudo mdutil -i off && sudo rm -rfv /.Spotlight-V100/ && sudo mdutil -E -i on'
+  alias cleanall='trashclean; cacheclean; logclean; imgclean; lsclean; sqlclean; spotclean;'
+
+  # gui shortcuts
+  alias dotshow='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
+  alias dothide='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
+  alias deskshow='defaults write com.apple.finder CreateDesktop -bool true && killall Finder'
+  alias deskhide='defaults write com.apple.finder CreateDesktop -bool false && killall Finder'
+  alias spoton='sudo mdutil -a -i on'
+  alias spotoff='sudo mdutil -a -i off'
+
+  # screensaver, displaysleep, gui session lock, gui logoff
+  alias saver="/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine"
+  alias sleep="pmset displaysleepnow"
+  alias logoff='sudo launchctl bootout gui/$(id -u $(whoami))'
+
+  # Does not work in Big Sur and/or later
+  #alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+
+  # battery
+  alias battery="pmset -g batt | grep -E '([0-9]+%).*' -o --colour=auto | cut -f1 -d';'"
+
+  # clear memory
+  alias purge="sudo purge"
+
+  # password generator
+  alias genpw='base64 </dev/urandom | fold -w 12 | head -1'
+
+  # Kill all the tabs in Chrome to free up memory
+  if [[ -e '/Applications/Google Chrome.app' ]]; then
+    alias chrome='open /Applications/Google\ Chrome.app/'
+    alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
+  fi
+
+  # aws
+  if has aws; then
+    alias a='aws sts get-caller-identity --output text --query Account'
+    alias awsconf='aws configure list'
+  fi
+
+  # code
+  if has code; then
+    alias codeext='code --list-extensions'
+    alias codehome='code $HOME'
+    alias codework='code $MY_WORKING_DIR'
+    alias coderepo='code $MY_REPOSITORY_DIR'
+  fi
+
+  # docker
+  if has docker; then
+    alias dockerclean='docker system prune -af --volumes'
+  fi
+}
+
+set-alias

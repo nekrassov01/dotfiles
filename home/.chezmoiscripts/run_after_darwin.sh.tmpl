@@ -1,0 +1,11 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+
+for file in xcode brew shell git asdf pip npm pwsh code dock defaults launch; do
+  script="$(dirname "$(chezmoi source-path)")/scripts/darwin/$file.sh"
+  if [ -r "$script" ] && [ -f "$script" ];then
+    sh "$script"
+  fi
+done
+unset script
+{{ end }}

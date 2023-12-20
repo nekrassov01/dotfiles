@@ -1,0 +1,5 @@
+/.gitconfig
+.aws/credentials
+Brewfile.lock.json
+.archive
+unused

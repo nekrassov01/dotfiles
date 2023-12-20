@@ -1,0 +1,247 @@
+#!/usr/bin/env bash
+
+# load: lang
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# load: disable bash warning message
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# load: basic path
+# Some path will be loaded after this basic path setup
+declare -a path_list=(
+  "$HOME/.local/bin"
+  "/usr/local/bin"
+  "/usr/bin"
+  "/bin"
+  "/usr/local/sbin"
+  "/usr/sbin"
+  "/sbin"
+)
+PATH="$(
+  IFS=":"
+  echo "${path_list[*]}"
+)"
+export PATH
+unset path_list
+
+# load: basic manual path
+# Some manpath will be loaded after this basic manual path setup
+declare -a manpath_list=(
+  "/usr/share/man"
+  "/usr/local/share/man"
+)
+MANPATH="$(
+  IFS=":"
+  echo "${manpath_list[*]}"
+)"
+export MANPATH
+unset manpath_list
+
+# load: prompt command
+# Some command will be loaded after this basic prompt command setup
+export PROMPT_COMMAND="history -a;history -c;history -r"
+
+# bash: history setting
+export HISTTIMEFORMAT="%F %T "
+export HISTSIZE="32768"
+export HISTFILESIZE="$HISTSIZE"
+export HISTCONTROL="ignoreboth"
+declare -a ignore_hist_commands=(
+  "exit"
+  "bg"
+  "fg"
+  "clear"
+  "cls" # alias
+  "pwd"
+  "ls"
+  "l"   # alias
+  "ll"  # alias
+  "dir" # alias
+  "history"
+  "top"
+  "w"
+  "env"
+  "envs"   # alias
+  "reload" # alias
+)
+HISTIGNORE="$(
+  IFS=":"
+  echo "${ignore_hist_commands[*]}"
+)"
+export HISTIGNORE
+unset ignore_hist_commands
+
+# load: basic ls color setting
+export CLICOLOR=1
+export LSCOLORS="gxfxcxdxbxegedabagacad"
+
+# load: additional ls color setting, and `ls` aliases
+if has gdircolors; then
+  if [[ -e "$HOME/.colorrc" ]]; then
+    eval "$(gdircolors -b "$HOME/.colorrc")" &>/dev/null
+  fi
+  alias ls='ls -hF --color=always --group-directories-first'
+  alias l='ls -l --full-time'
+  alias ll='ls -al --full-time'
+  alias dir='ls -al --full-time'
+else
+  alias ls='ls -hF -G'
+  alias l='ls -l'
+  alias ll='ls -al'
+  alias dir='ls -al'
+fi
+
+# load: default editor
+export EDITOR="code"
+
+# load: read the manual from where left off last time
+export MANPAGER="less --no-init --shift 4 --LONG-PROMPT"
+
+# load: aws cli disable pagination
+export AWS_PAGER=""
+
+# load: node repl history setting
+export NODE_REPL_HISTORY_SIZE="32768"
+
+# load: python encoding
+export PYTHONIOENCODING="UTF-8"
+
+# load: box directory
+MY_BOX_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima"
+mkdir -p "$MY_BOX_DIR" && chmod +x "$MY_BOX_DIR"
+export MY_BOX_DIR
+if [[ ! -d "$MY_BOX_DIR" ]]; then
+  ln -sfn "$MY_BOX_DIR" "$HOME/Documents/kawashima"
+fi
+
+# load: project directory
+MY_PROJECT_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima/project"
+mkdir -p "$MY_PROJECT_DIR" && chmod +x "$MY_PROJECT_DIR"
+export MY_PROJECT_DIR
+
+# load: ghq root
+MY_REPOSITORY_DIR="$HOME/.repository"
+mkdir -p "$MY_REPOSITORY_DIR" && chmod +x "$MY_REPOSITORY_DIR"
+export MY_REPOSITORY_DIR
+
+# load: tools installed by brew
+if has brew; then
+
+  BREW_PREFIX=$(brew --prefix)
+
+  # load: Compatibility with bash completion v1
+  if [[ -d "$BREW_PREFIX/etc/bash_completion.d" ]]; then
+    export BASH_COMPLETION_COMPAT_DIR="$BREW_PREFIX/etc/bash_completion.d"
+  fi
+
+  # -----------------------------------------------------------------
+  #  NOTE:
+  #  docker installed with rancher-desktop throws an error message
+  #  when loading the completion script, so I commented it out.
+  #  ISSUE:
+  #  https://github.com/rancher-sandbox/rancher-desktop/issues/1260
+  # -----------------------------------------------------------------
+
+  ## load: docker completion
+  #if has docker; then
+  #  curl -fsSL "https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker" \
+  #    -o "$BASH_COMPLETION_COMPAT_DIR/docker.sh"
+  #fi
+
+  ## load: docker-compose completion
+  #if has docker-compose; then
+  #  curl -fsSL "https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose" \
+  #    -o "$BASH_COMPLETION_COMPAT_DIR/docker-compose.sh"
+  #fi
+
+  # load: scripts under profile.d
+  for prof in "$BREW_PREFIX/etc/profile.d/"*.sh; do
+    if [[ -r "$prof" ]]; then
+      source "$prof"
+    fi
+  done
+  unset prof
+
+  # load: scripts under bash_completion.d
+  for comp in "$BREW_PREFIX/etc/bash_completion.d/"*; do
+    if [[ -r "$comp" ]]; then
+      source "$comp"
+    fi
+  done
+  unset comp
+
+  # load: gnu tools path
+  for gnubinpath in "$BREW_PREFIX"/opt/{coreutils,findutils,gnu-sed,gnu-tar,grep}/libexec/gnubin; do
+    if [[ -e "$gnubinpath" && -r "$gnubinpath" ]]; then
+      PATH="$gnubinpath:$PATH"
+    fi
+  done
+  export PATH
+  unset gnubinpath
+
+  # load: gnu man path
+  for gnumanpath in "$BREW_PREFIX"/opt/{coreutils,findutils,gnu-sed,gnu-tar,grep}/libexec/gnuman; do
+    if [[ -e "$gnumanpath" && -r "$gnumanpath" ]]; then
+      MANPATH="$gnumanpath:$MANPATH"
+    fi
+  done
+  export MANPATH
+  unset gnumanpath
+
+  # load: fzf settings
+  if has fzf; then
+    BREW_FZF_PREFIX=$(brew --prefix fzf)
+    export PATH="$BREW_FZF_PREFIX/bin:$PATH"
+    source "$BREW_FZF_PREFIX/shell/completion.bash" 2>/dev/null
+    source "$BREW_FZF_PREFIX/shell/key-bindings.bash" 2>/dev/null
+    unset BREW_FZF_PREFIX
+  fi
+
+  # load: asdf settings
+  if has asdf; then
+    source "$(brew --prefix asdf)/libexec/asdf.sh"
+    source "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
+  fi
+
+  # cleanup: brew path prefix
+  unset BREW_PREFIX
+fi
+
+# Since my main focus is vscode, I decided not to do item2 shell integration
+#if [ -f "$HOME/.iterm2_shell_integration.bash" ]; then
+#    source "$HOME/.iterm2_shell_integration.bash"
+#fi
+
+# load: fzf
+if has fzf; then
+  export FZF_DEFAULT_COMMAND='ls -A'
+  export FZF_DEFAULT_OPTS='--layout=reverse --border --inline-info --height=60% --preview-window=70%'
+
+  if has rg; then
+    export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+  fi
+
+  if has bat; then
+    export FZF_CTRL_T_OPTS='--preview-window=70% --preview "bat --color=always --style=header,grid --line-range :100 {}"'
+  fi
+fi
+
+# load: golang environment variable
+if has go; then
+  GOPATH=$(go env GOPATH)
+  export GOPATH
+  export PATH=$PATH:$GOPATH/bin
+  export GO111MODULE=on
+  export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+fi
+
+# load: aws_completer
+if has aws_completer; then
+  complete -C "aws_completer" aws
+fi
+
+# load: rancher settings
+if [[ -d "$HOME/.rd" ]]; then
+  export PATH="$HOME/.rd/bin:$PATH"
+fi

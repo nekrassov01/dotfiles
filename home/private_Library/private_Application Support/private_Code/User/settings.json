@@ -1,0 +1,221 @@
+{
+  "editor.copyWithSyntaxHighlighting": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.detectIndentation": false,
+  "editor.emptySelectionClipboard": false,
+  "editor.foldingMaximumRegions": 32768,
+  "editor.fontFamily": "'PlemolJP Console NF', 'HackGen Console NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
+  "editor.fontSize": 18,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.guides.bracketPairs": true,
+  "editor.minimap.enabled": false,
+  "editor.mouseWheelZoom": true,
+  "editor.renderWhitespace": "all",
+  "editor.showFoldingControls": "always",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.snippetSuggestions": "top",
+  "editor.suggest.showKeywords": false,
+  "editor.suggest.showWords": false,
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "editor.stickyScroll.enabled": true,
+  "editor.wordBasedSuggestions": "off",
+  "explorer.autoReveal": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.compactFolders": false,
+  "explorer.incrementalNaming": "smart",
+  "explorer.sortOrder": "type",
+  "explorer.sortOrderLexicographicOptions": "unicode",
+  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.fontFamily": "'PlemolJP Console NF', 'HackGen Console NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
+  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.scrollback": 65535,
+  "terminal.integrated.profiles.osx": {
+    "bash": {
+      "path": "/usr/bin/env",
+      "args": ["bash", "--login"],
+      "icon": "terminal-bash"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "workbench.commandPalette.history": 65535,
+  "workbench.commandPalette.preserveInput": true,
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.editor.enablePreview": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.settings.editor": "json",
+  "workbench.settings.openDefaultSettings": true,
+  "workbench.settings.openDefaultKeybindings": true,
+  "workbench.settings.useSplitJSON": true,
+  "workbench.startupEditor": "readme",
+  "workbench.tree.indent": 20,
+  "workbench.view.alwaysShowHeaderActions": true,
+  "files.associations": {
+    "**/*rc": "properties",
+    "**/.bash*": "shellscript",
+    "**/*.bats": "bats",
+    "**/git/attributes": "properties",
+    "**/git/config": "properties",
+    "**/git/ignore": "ignore",
+    "**/.aws/config": "properties",
+    "**/.ssh/config": "ssh-config",
+    "**/.ssh/include/*": "ssh-config",
+    "**/*.backlog": "backlog",
+    "**/*.bl": "backlog",
+    "**/.hushlogin": "plaintext",
+    "**/.tool-versions": "properties",
+    "**/.shellspec": "properties",
+    "**/.bundle*/**/*file": "properties"
+  },
+  "files.eol": "\n",
+  "files.hotExit": "off",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.*_history": true,
+    "**/.bash_sessions": true,
+    "**/.viminfo": true,
+    "**/.lesshst": true,
+    "**/.wget-hsts": true,
+    "**/__pycache__": true,
+    "**/.ipynb_checkpoints": true,
+    "**/.Box*": true,
+    "**/.CFUserTextEncoding": true,
+    "**/.DS_Store": true,
+    "**/.localized": true,
+    "**/.Trash*": true,
+    "**/Applications": true,
+    "**/Desktop": true,
+    "**/Downloads": true,
+    "**/Library": true,
+    "**/Movies": true,
+    "**/Music": true,
+    "**/Pictures": true,
+    "**/Public": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.hg/store/**": true,
+    "**/out/**": true,
+    "**/Box-Box/**": true
+  },
+  "window.openWithoutArgumentsInNewWindow": "on",
+  "window.restoreWindows": "none",
+  "debug.console.fontSize": 18,
+  "debug.console.wordWrap": false,
+  "debug.inlineValues": "on",
+  "diffEditor.wordWrap": "off",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/Box-Box": true
+  },
+  "search.showLineNumbers": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "telemetry.telemetryLevel": "off",
+  "git.openRepositoryInParentFolders": "never",
+  "gitlens.telemetry.enabled": false,
+  "redhat.telemetry.enabled": false,
+  "docker.dockerPath": "~/.rd/bin/docker",
+  "python.defaultInterpreterPath": "~/.asdf/shims/python",
+  "python.languageServer": "Pylance",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "black-formatter.args": ["--line-length=200"],
+  "isort.path": ["~/.asdf/shims/isort"],
+  "isort.check": true,
+  "notebook.markup.fontSize": 12,
+  "go.formatTool": "gofmt",
+  "go.lintTool": "golangci-lint",
+  "go.toolsManagement.autoUpdate": true,
+  "go.useLanguageServer": true,
+  "gopls": {
+    "build.directoryFilters": ["-**/node_modules", "-**/.git/objects", "-**/.git/subtree-cache"]
+  },
+  "shellcheck.exclude": ["1090", "1091"],
+  "shellcheck.ignorePatterns": {
+    "**/.iterm2_shell_integration.bash": true,
+    "**/Box-Box": true,
+    "**/msp-tools": true
+  },
+  "shellformat.effectLanguages": ["shellscript", "bats"],
+  "powershell.codeFormatting.preset": "Stroustrup",
+  "powershell.codeFormatting.alignPropertyValuePairs": false,
+  "powershell.integratedConsole.showOnStartup": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "prettier.printWidth": 120,
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "css.validate": false,
+  "markdown.preview.fontSize": 12,
+  "markdown.preview.lineHeight": 1.4,
+  "markdown.preview.breaks": true,
+  "markdown.extension.orderedList.marker": "one",
+  "markdown.extension.orderedList.autoRenumber": false,
+  "markdownlint.run": "onType",
+  "markdownlint.config": {
+    "MD010": false,
+    "MD024": false,
+    "MD033": false,
+    "MD034": false,
+    "MD037": false,
+    "MD041": false
+  },
+  "stylelint.enable": true,
+  "textlint.autoFixOnSave": true,
+  "textlint.configPath": "~/.textlintrc",
+  "textlint.run": "onType",
+  "backlog.preview.fontSize": 12,
+  "backlog.preview.lineHeight": 1.4,
+  "[go][go.mod][makefile]": {
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  "[go.mod]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.bracketPairColorization.enabled": false,
+    "editor.guides.bracketPairs": false,
+    "editor.tabSize": 4
+  },
+  "[json][jsonc]": {
+    "editor.tabSize": 4
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[shellscript][bats]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.wordWrap": "off",
+    "files.trimTrailingWhitespace": false
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "Backlog code line": {
+    "prefix": "bline",
+    "body": [" {code}$1{/code} "]
+  },
+  "Backlog code block": {
+    "prefix": "bcode",
+    "body": ["{code}", "$1", "{/code}"]
+  },
+  "Backlog quote block": {
+    "prefix": "bqt",
+    "body": ["{quote}", "$1", "{/quote}"]
+  },
+  "Backlog table block top-header": {
+    "prefix": "bt1",
+    "body": ["|col1|col2|col3|h", "||||", "||||"]
+  },
+  "Backlog table block left-header": {
+    "prefix": "bt2",
+    "body": ["| ~row1 |||", "| ~row2 |||", "| ~row3 |||"]
+  },
+  "Backlog h1": {
+    "prefix": "bh1",
+    "body": ["* $1"]
+  },
+  "Backlog h2": {
+    "prefix": "bh2",
+    "body": ["** $1"]
+  },
+  "Backlog h3": {
+    "prefix": "bh3",
+    "body": ["*** $1"]
+  },
+  "Backlog h4": {
+    "prefix": "bh4",
+    "body": ["**** $1"]
+  },
+  "Backlog checkbox": {
+    "prefix": "bcb",
+    "body": ["- [ ] $1"]
+  },
+  "Backlog evidence 1": {
+    "prefix": "bev1",
+    "body": ["** エビデンス", "{code}", "$1", "{/code}"]
+  },
+  "Backlog evidence 2": {
+    "prefix": "bev2",
+    "body": [
+      "** 作業前",
+      "{code}",
+      "$1",
+      "{/code}",
+      "** 作業前",
+      "{code}",
+      "",
+      "{/code}"
+    ]
+  },
+  "Backlog evidence 3": {
+    "prefix": "bev3",
+    "body": [
+      "** $1",
+      "*** 作業前",
+      "{code}",
+      "",
+      "{/code}",
+      "*** 作業前",
+      "{code}",
+      "",
+      "{/code}"
+    ]
+  }
+}

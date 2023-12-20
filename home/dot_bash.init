@@ -1,0 +1,244 @@
+#!/bin/sh
+
+# NOTE: POSIX compliant since it is also used in the initialization process
+
+# helper: check if macOS
+ismacos() {
+  if [ "$(uname -s)" != 'Darwin' ]; then
+    echo 'ERROR: This process works only on macOS.'
+    return 1
+  fi
+  return 0
+}
+
+# Check OS each time
+ismacos
+
+# helper: wrapper for changing console text color
+color() {
+  if [ -z "$*" ]; then
+    print_info "Required parameter {black|red|green|yellow|blue|purple|cyan|white|bblack|bred|bgreen|byellow|bblue|bpurple|bcyan|bwhite|reset}"
+    return 0
+  fi
+  case "$1" in
+  black)
+    tput setaf 0
+    ;;
+  red)
+    tput setaf 1
+    ;;
+  green)
+    tput setaf 2
+    ;;
+  yellow)
+    tput setaf 3
+    ;;
+  blue)
+    tput setaf 4
+    ;;
+  purple)
+    tput setaf 5
+    ;;
+  cyan)
+    tput setaf 6
+    ;;
+  white)
+    tput setaf 7
+    ;;
+  bblack)
+    tput setaf 0 && tput bold
+    ;;
+  bred)
+    tput setaf 1 && tput bold
+    ;;
+  bgreen)
+    tput setaf 2 && tput bold
+    ;;
+  byellow)
+    tput setaf 3 && tput bold
+    ;;
+  bblue)
+    tput setaf 4 && tput bold
+    ;;
+  bpurple)
+    tput setaf 5 && tput bold
+    ;;
+  bcyan)
+    tput setaf 6 && tput bold
+    ;;
+  bwhite)
+    tput setaf 7 && tput bold
+    ;;
+  reset)
+    tput sgr0
+    ;;
+  *)
+    print_err "'$*' is invalid value."
+    return 1
+    ;;
+  esac
+}
+
+# helper: wrapper for message of information
+print_info() {
+  if [ -z "$*" ]; then
+    print_err "Need to specify the message."
+    return 1
+  fi
+  echo "$(color bwhite)INFO: $(color reset)$*"
+}
+
+# helper: wrapper for message of success
+print_success() {
+  if [ -z "$*" ]; then
+    print_err "Need to specify the message."
+    return 1
+  fi
+  echo "$(color bcyan)SUCCESS: $(color reset)$*"
+}
+
+# helper: wrapper for message of warning
+print_warn() {
+  if [ -z "$*" ]; then
+    print_err "Need to specify the message."
+    return 1
+  fi
+  echo "$(color byellow)WARNING: $(color reset)$*"
+}
+
+# helper: wrapper for message of error
+print_err() {
+  if [ -z "$*" ]; then
+    print_err "Need to specify the message."
+    return 1
+  fi
+  echo "$(color bred)ERROR: $(color reset)$*"
+}
+
+# helper: wrapper for message of notification
+print_note() {
+  if [ -z "$*" ]; then
+    print_err "Need to specify the message."
+    return 1
+  fi
+  echo "$(color bpurple)NOTE: $(color reset)$*"
+}
+
+# helper: wrapper for message of header of process
+print_header() {
+  if [ -z "$1" ]; then
+    print_err "Need to specify the message."
+    return 1
+  fi
+  echo "$(color bcyan)$1$(color reset)"
+  echo "$(color bcyan)$(head -c ${#1} /dev/zero | sed -e 's/\x00/\-/g')$(color reset)"
+}
+
+# helper: wrapper for checking command exists
+has() {
+  if [ -z "$1" ]; then
+    print_err 'Need to specify a command.'
+    return 1
+  fi
+  command -v "$1" >/dev/null 2>&1
+}
+
+# helper: run `has` for each tools
+chk() {
+  if [ -z "$*" ]; then
+    print_err 'Need to specify a command.'
+    return 1
+  fi
+  for value in "$@"; do
+    if ! has "$value"; then
+      print_err "Required tool '$value' does not exists."
+      return 1
+    fi
+  done
+  return 0
+}
+
+# helper: wrapper for creating symlink
+mklink() {
+  if [ "$#" != 2 ]; then
+    print_err "Need to specify two parameters."
+    return 1
+  fi
+  print_info "Creating symlink for $(color green)$1$(color reset)"
+  if ! ln -sfn "$1" "$2"; then
+    print_err "Create symlink '$1' failed."
+    return 1
+  fi
+}
+
+# helper: confirm to reboot
+restart() {
+  printf "Restart %s? (y/N): " "$(uname -n)"
+  read -r reply
+  case $reply in
+  [Yy]*)
+    sudo reboot
+    ;;
+  *)
+    echo "Canceled."
+    ;;
+  esac
+}
+
+get_github_latest_version() {
+  check_rate_limit() {
+    if [ -n "$1" ]; then
+      case "$1" in
+      *"rate limit"*)
+        echo "ERROR: Rate limit has been exceeded."
+        return 1
+        ;;
+      esac
+    fi
+    return 0
+  }
+
+  if [ $# != 2 ]; then
+    echo "ERROR: Need two parameters. repo-author and repo-name."
+    return 1
+  fi
+
+  if ! command -v jq >/dev/null 2>&1; then
+    echo "ERROR: 'jq' is not installed but is required."
+    return 1
+  fi
+
+  if ! response=$(curl -s "https://api.github.com/repos/$1/$2/releases/latest" 2>/dev/null); then
+    echo "ERROR: Failed to get the latest release of $2 via the GitHub API."
+    return 1
+  fi
+
+  check_rate_limit "$response" || return 1
+
+  if ! ver=$(echo "$response" | jq -r .tag_name 2>/dev/null); then
+    echo "ERROR: 'tag_name' does not exist in the response."
+    return 1
+  fi
+
+  if [ ! "$ver" = 'null' ]; then
+    echo "$ver"
+    return 0
+  fi
+
+  if ! response=$(curl -s "https://api.github.com/repos/$1/$2/tags" 2>/dev/null); then
+    echo "ERROR: Failed to get the latest tag of $2 via the GitHub API."
+    return 1
+  fi
+
+  check_rate_limit "$response" || return 1
+
+  if ! tags=$(echo "$response" | jq ".[].name" 2>/dev/null); then
+    echo "ERROR: 'name' does not exist in the response."
+    return 1
+  fi
+
+  if ! echo "$tags" | jq -r 'sort_by(.) | reverse | .[0]'; then
+    echo "ERROR: Failed to parse the latest tag of $2 via the GitHub API."
+    return 1
+  fi
+}

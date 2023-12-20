@@ -1,0 +1,457 @@
+#!/usr/bin/env bash
+
+#
+# Functions for backlog api
+#
+
+# Get backlog api key
+get_backlog_key() {
+  # Location of the specified key storage
+  local key_file="$HOME/.backlog/api.key"
+
+  # Exit function if the api key does not exist
+  if [[ ! -f $key_file ]]; then
+    print_err "$key_file does not exists."
+    return 1
+  fi
+
+  # Decode base64 encoded api key and get raw string
+  base64 -d <"$key_file"
+  echo
+}
+
+# Get backlog base url
+get_backlog_base_url() {
+  # Location of the specified url
+  local base_url="$HOME/.backlog/url"
+
+  # Exit function if the api key does not exist
+  if [[ ! -f $base_url ]]; then
+    print_err "$base_url does not exists."
+    return 1
+  fi
+
+  # Decode base64 encoded url and get raw string
+  base64 -d <"$base_url"
+  echo
+}
+
+# Check status code to constructed url with the parameters and key
+check_backlog_url() {
+  if [[ -z "$1" ]]; then
+    print_err "Need to specify a url."
+    return 1
+  fi
+
+  local url
+  if ! url="$(curl -s "$1" -w "%{http_code}" -o /dev/null)"; then
+    print_err "Invalid URL."
+    return 1
+  fi
+
+  if [[ $url != 200 && $url != 301 ]]; then
+    print_err "Invalid URL."
+    return 1
+  fi
+
+  return 0
+}
+
+# Get Backlog project info from project id
+get_backlog_project() {
+  if [[ -z "$1" ]]; then
+    print_err "Need to specify a string for backlog project id."
+    return 1
+  fi
+
+  # required: jq
+  chk jq
+
+  local api_key
+  api_key=$(get_backlog_key)
+
+  # Base url for get issue
+  local base_url
+  base_url=$(get_backlog_base_url)
+
+  # API url
+  if ! local api_url="${base_url}/api/v2/projects/${1}?apiKey=${api_key}"; then
+    print_err "Invalid URL."
+    return 1
+  fi
+
+  # Verify that HTTP status code 200 or 301 is returned
+  if ! check_backlog_url "$api_url"; then
+    return 1
+  fi
+
+  # Display result
+  if ! curl -s "$api_url" | jq -r '.'; then
+    print_err "Invalid URL."
+    return 1
+  fi
+}
+
+# Get Backlog issue summary from issue key
+# If parent issue exists, the result is also output
+get_backlog_issue() {
+  if [[ -z "$1" ]]; then
+    print_err "Need to specify a string for backlog issue key."
+    return 1
+  fi
+
+  # required: jq
+  chk jq
+
+  local api_key
+  api_key=$(get_backlog_key)
+
+  # Base url for get issue
+  local base_url
+  base_url=$(get_backlog_base_url)
+
+  # API url
+  if ! local api_url="${base_url}/api/v2/issues/${1}?apiKey=${api_key}"; then
+    print_err "Invalid URL."
+    return 1
+  fi
+
+  # Verify that HTTP status code 200 or 301 is returned
+  if ! check_backlog_url "$api_url"; then
+    return 1
+  fi
+
+  # String to evaluate json
+  local eval_str="jq -r --arg url \$base_url/view/ '. |= .+ {\"url\": (\$url + .issueKey)} | { issueKey: .issueKey, summary: .summary, parentIssueId: .parentIssueId, url: '.url' }'"
+
+  # Display result
+  local result
+  result=$(curl -s "$api_url")
+  echo "$result" | eval "$eval_str"
+
+  # Exit function if parent issue does not exist
+  local parent_issue_id
+  if ! parent_issue_id=$(echo "$result" | jq -r '.parentIssueId'); then
+    print_err "Invalid issue ID."
+    return 1
+  fi
+
+  if [[ "$parent_issue_id" = "null" ]]; then
+    return 0
+  fi
+
+  # Display result if parent issue exists
+  if ! curl -s "${base_url}/api/v2/issues/${parent_issue_id}?apiKey=${api_key}" | eval "$eval_str"; then
+    print_err "Get issue failed."
+    return 1
+  fi
+}
+
+# Search Backlog issue by keyword
+search_backlog_issue() {
+  if [[ $# != 2 ]]; then
+    print_err "Need to two parameters. projectId and keyword."
+    return 1
+  fi
+
+  # required: jq
+  chk jq
+
+  local api_key
+  api_key=$(get_backlog_key)
+
+  local project
+  if ! project=$(get_backlog_project "$1"); then
+    print_err "Invalid project."
+    return 1
+  fi
+
+  local project_key
+  if ! project_key=$(echo "$project" | jq -r '.id'); then
+    print_err "Invalid project key."
+    return 1
+  fi
+
+  # Base url for search issue
+  local base_url
+  base_url=$(get_backlog_base_url)
+
+  # API url
+  if ! local api_url="${base_url}/api/v2/issues?apiKey=${api_key}&projectId[]=${project_key}&keyword=${2}&count=100"; then
+    print_err "Invalid URL."
+    return 1
+  fi
+
+  # Verify that HTTP status code 200 or 301 is returned
+  if ! check_backlog_url "$api_url"; then
+    return 1
+  fi
+
+  # Display result
+  if ! curl -s "$api_url" | jq -r --arg url "$base_url/view/" '.[] |= .+ {"url": ($url + .issueKey)} | map({ issueKey: .issueKey, summary: .summary, parentIssueId: .parentIssueId, url: .url })'; then
+    print_err "Get issue failed."
+    return 1
+  fi
+}
+
+#
+# Functions for fzf
+#
+
+# fzf search for ghq root
+fz_ghq() {
+  chk fzf ghq
+  local target
+  target=$(ghq list | fzf --phony --preview-window=70% --preview "ls -al $(ghq root)/{} | tail -n+4")
+
+  if [[ -n "$target" ]]; then
+    cd "$(ghq root)/$target" || return 1
+  fi
+}
+
+# fzf search for ssh hosts
+fz_ssh() {
+  # required: fzf
+  chk fzf
+
+  local target
+
+  # Must include sub configs one level below
+  # shellcheck disable=SC2046,SC2002
+  target=$(
+    cat $(
+      find "$HOME/.ssh" -maxdepth 2 -type f,l -regex '.*config$' | sort
+    ) |
+      grep -i ^Host |
+      grep -v '\*' |
+      uniq |
+      awk '{print $2}' |
+      fzf
+  )
+
+  if [[ -n "$target" ]]; then
+    ssh "$target"
+  fi
+}
+
+# fzf search for aws cli reference
+fz_awscli() {
+  # required: fzf aws
+  chk fzf aws
+
+  local target url url_prefix="https://docs.aws.amazon.com/cli/latest/reference"
+
+  if [[ -z "$1" ]]; then
+    target=$(
+      aws help |
+        col -b |
+        sed -n '/AVAILABLE SERVICES/,/SEE ALSO/p' |
+        grep 'o ' |
+        sed s/'o '//g |
+        tr -d ' ' |
+        sed -e /help/d |
+        sort |
+        fzf --preview-window=80% --preview "echo $url_prefix/{}/index.html"
+    )
+    url="$url_prefix/${target}/index.html"
+  else
+    target=$(aws "$1" help |
+      col -b |
+      sed -n '/AVAILABLE COMMANDS/,/()/p' |
+      grep 'o ' |
+      sed 's/o\ //g' |
+      tr -d ' ' |
+      sed -e /help/d |
+      sort |
+      fzf --preview-window=60% --preview "echo $url_prefix/${1}/{}.html")
+    url="$url_prefix/${1}/${target}.html"
+  fi
+
+  if [[ -n $target ]]; then
+    open "$url"
+  fi
+}
+
+# fzf search for aws powershell reference
+fz_awspwsh() {
+  # required: fzf pwsh
+  chk fzf pwsh
+
+  local target url_prefix="https://docs.aws.amazon.com/powershell/latest/reference/items"
+  target=$(pwsh -c "(Get-AWSCmdletName).CmdletName" | fzf --preview "echo $url_prefix/{}.html")
+
+  if [[ -n $target ]]; then
+    open "$url_prefix/${target}.html"
+  fi
+}
+
+#
+# Functions for utility
+#
+
+# mkdir -p <dir> && cd <dir>
+mkcd() {
+  if [[ -z "$1" ]]; then
+    print_err "Need to specify the directory name."
+    return 1
+  fi
+
+  if mkdir -p "$1"; then
+    cd "$_" || return 1
+  fi
+}
+
+# cd $(readlink <dir>)
+lncd() {
+  if [[ -z "$1" ]]; then
+    target_dir=$(pwd) || target_dir=${1%/}
+  fi
+
+  cd "$(readlink "$target_dir")" || return 1
+}
+
+# Open directory
+o() {
+  if [[ "$#" == 0 ]]; then
+    open .
+  else
+    open "$@"
+  fi
+}
+
+# Display active interface only
+ifactive() {
+  for i in $(ifconfig -lu); do
+    if ifconfig "$i" | grep -q 'status: active'; then
+      echo "$i"
+    fi
+  done
+}
+
+# Extracts archived files / mounts disk images
+# reference: this based on https://github.com/holman/dotfiles/blob/master/functions/extract
+extract() {
+  if [[ -z "$1" ]]; then
+    print_err "Need to specify a file."
+    return 1
+  fi
+
+  if [[ ! -f "$1" ]]; then
+    print_err "'$1' is not a valid file."
+    return 1
+  fi
+
+  case "$1" in
+  *.tar.bz2)
+    tar -jxvf "$1"
+    ;;
+  *.tar.gz)
+    tar -zxvf "$1"
+    ;;
+  *.bz2)
+    bunzip2 "$1"
+    ;;
+  *.dmg)
+    hdiutil mount "$1"
+    ;;
+  *.gz)
+    gunzip "$1"
+    ;;
+  *.tar)
+    tar -xvf "$1"
+    ;;
+  *.tbz2)
+    tar -jxvf "$1"
+    ;;
+  *.tgz)
+    tar -zxvf "$1"
+    ;;
+  *.zip)
+    unzip "$1"
+    ;;
+  *.ZIP)
+    unzip "$1"
+    ;;
+  *.pax)
+    pax <"$1" -r
+    ;;
+  *.pax.Z)
+    uncompress "$1" --stdout | pax -r
+    ;;
+  *.rar)
+    unrar x "$1"
+    ;;
+  *.Z)
+    uncompress "$1"
+    ;;
+  *)
+    print_err "'$1' cannot be extracted/mounted via extract()."
+    ;;
+  esac
+}
+
+# Check brew formulae dependencies
+brewuses() {
+  list=$(brew list --formulae)
+  for i in ${list}; do
+    echo "$(color blue)$i$(color reset)"
+    uses=$(brew uses --installed "$i")
+    for j in ${uses}; do
+      echo "-> $j"
+    done
+  done
+}
+
+# Delete non-latest versions of modules managed by asdf
+optimize_asdf_tools() {
+  chk asdf
+
+  while read -r parent; do
+    plugin=$(basename "$parent")
+    print_info "Optimizing $plugin"
+    print_info "-> Installing $plugin latest"
+
+    if ! asdf install "$plugin" latest 1>/dev/null; then
+      print_err "$plugin installing failed."
+      return 1
+    fi
+
+    versions=$(find "$parent" -maxdepth 1 -mindepth 1 -type d | sort -r)
+    local_latest=$(basename "$(echo "$versions" | head -n 1)")
+
+    while read -r child; do
+      version=$(basename "$child")
+
+      print_info "-> Uninstalling $plugin $version"
+
+      if ! asdf uninstall "$plugin" "$version" 1>/dev/null; then
+        print_err "$plugin uninstalling failed."
+        return 1
+      fi
+    done < <(echo "$versions" | tail -n +2)
+
+    print_info "-> Globalizing $plugin $local_latest"
+
+    if ! asdf global "$plugin" "$local_latest" 1>/dev/null; then
+      print_err "$plugin globalizing failed."
+      return 1
+    fi
+
+    print_info "-> Reshimming $plugin $local_latest"
+
+    if ! asdf reshim "$plugin" 1>/dev/null; then
+      print_err "$plugin reshimming failed."
+      return 1
+    fi
+  done < <(find "$HOME/.asdf/installs" -maxdepth 1 -mindepth 1 -type d)
+}
+
+# Access weather forecast with ascii art (wttr.in)
+tenki() {
+  curl "https://wttr.in/$1?lang=ja"
+}
+
+# Calculator
+calc() {
+  echo "$(($*))"
+}

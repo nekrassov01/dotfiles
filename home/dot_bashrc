@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Apply only to interactive shell
+case $- in
+*i*) ;;
+*) return ;;
+esac
+
+# load: profile
+if [[ -r "$HOME/.bash_profile" && -f "$HOME/.bash_profile" ]]; then
+  source "$HOME/.bash_profile"
+fi
+
+# load: shell option
+if has shopt; then
+  for option in autocd cdable_vars cdspell direxpand dirspell dotglob extglob failglob globstar cmdhist lithist checkwinsize checkjobs; do
+    shopt -s "$option" 2>/dev/null
+  done
+fi
+unset option
+
+# load: tty settings
+# Delete the word behind point on terminal, using '/' as the word boundaries
+if has stty; then
+  stty werase undef
+  bind '"\C-w": unix-filename-rubout'
+fi

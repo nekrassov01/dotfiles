@@ -1,0 +1,17 @@
+# When this is enabled, vscode remote ssh doesn't work properly because there are too many hosts...
+#Include ./include/*
+
+Include ./include/git.ssh-config
+Include ./include/jump.ssh-config
+
+# devcontainer server
+#Host dev-01
+#  Hostname <ip>
+#  Port 22
+#  User ec2-user
+#  IdentityFile <key>
+#  UserKnownHostsFile /dev/null
+#  StrictHostKeyChecking no
+#  PasswordAuthentication no
+#  IdentitiesOnly yes
+#  LogLevel FATAL
