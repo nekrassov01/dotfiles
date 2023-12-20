@@ -1,7 +1,9 @@
 {{ if eq .chezmoi.os "darwin" -}}
 #!/bin/sh
 
-for file in xcode brew shell git asdf pip npm pwsh code dock defaults launch; do
+export PATH="$HOME/.local/bin:$HOME/.asdf/shims:/opt/homebrew/bin:$PATH"
+
+for file in brew shell git asdf pip npm pwsh code dock defaults launch; do
   script="$(dirname "$(chezmoi source-path)")/scripts/darwin/$file.sh"
   if [ -r "$script" ] && [ -f "$script" ];then
     sh "$script"

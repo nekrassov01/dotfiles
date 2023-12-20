@@ -35,13 +35,13 @@ if ! has $cmd; then
 
   repo_author='kcrawford'
   repo_name=$cmd
-  version=$(get_github_latest_version $repo_author $repo_name)
-  dwonload_uri="https://github.com/$repo_author/$repo_name/releases/download/$version"
+  version=$(get_github_latest_release $repo_author $repo_name)
+  download_uri="https://github.com/$repo_author/$repo_name/releases/download/$version"
   download_file="$cmd-$version.pkg"
 
-  print_info "Downloading $cmd from $(color green)$dwonload_uri$(color reset)"
+  print_info "Downloading $cmd from $(color green)$download_uri$(color reset)"
 
-  if ! curl -OL "$dwonload_uri/$download_file" 2>/dev/null; then
+  if ! curl -OL "$download_uri/$download_file" 2>/dev/null; then
     print_err "$cmd download via github failed."
     exit 1
   fi
@@ -57,24 +57,6 @@ if ! has $cmd; then
 
   if ! rm "$download_file"; then
     print_err "$cmd remove failed."
-    exit 1
-  fi
-
-  print_info "Optimizing $cmd path"
-
-  dockutil_dst_prefix="/usr/local/dockutil"
-  dockutil_bin_prefix="/usr/local/bin"
-  sudo mkdir -p "$dockutil_dst_prefix" && sudo chown "$(whoami)":admin "$dockutil_dst_prefix"
-
-  if ! cp -f "$dockutil_bin_prefix/$cmd" "$dockutil_dst_prefix/$cmd"; then
-    print_err "dockutil optimize path failed."
-    exit 1
-  fi
-
-  print_info "Optimizing $cmd link"
-
-  if ! ln -sfn "$dockutil_dst_prefix/$cmd" "$dockutil_bin_prefix/$cmd"; then
-    print_err "dockutil optimize link failed."
     exit 1
   fi
 else

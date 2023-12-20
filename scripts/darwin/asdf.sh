@@ -32,6 +32,8 @@ while read -r line; do
 
   print_info "Adding $plugin"
 
+  asdf plugin add "$plugin" 1>/dev/null
+
   current=$(echo "$line" | cut -d " " -f 2)
   latest=$(asdf latest "$plugin")
 
@@ -41,8 +43,6 @@ while read -r line; do
   else
     version=$current
   fi
-
-  ! asdf plugin add "$plugin" >/dev/null 2>&1 && :
 
   print_info "-> Installing $plugin $version"
 
