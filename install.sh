@@ -6,7 +6,6 @@ set -eu
 
 ensure_chezmoi() {
   bin_dir="$HOME/.local/bin"
-  chezmoi="$bin_dir/chezmoi"
   mkdir -p "$bin_dir"
   if [ "$(command -v chezmoi)" ]; then
     return
@@ -25,5 +24,4 @@ ensure_chezmoi() {
 
 ensure_chezmoi
 chezmoi=$(command -v chezmoi)
-script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
-exec "$chezmoi" init --apply "--source=$script_dir"
+exec "$chezmoi" init "nekrassov01" --apply
