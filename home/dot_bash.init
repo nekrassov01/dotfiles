@@ -131,7 +131,7 @@ print_header() {
     return 1
   fi
   echo "$(color bcyan)$1$(color reset)"
-  echo "$(color bcyan)$(head -c ${#1} /dev/zero | sed -e 's/\x00/\-/g')$(color reset)"
+  echo "$(color bcyan)$(head -c ${#1} /dev/zero | perl -pe 's/\x00/-/g')$(color reset)"
 }
 
 # helper: wrapper for checking command exists
@@ -183,6 +183,41 @@ restart() {
     echo "Canceled."
     ;;
   esac
+}
+
+# helper: get github repository latest tag from releases
+get_github_latest_release() {
+  if [ $# != 2 ]; then
+    print_err "Need to two parameters. repo-author and repo-name."
+    return 1
+  fi
+
+  if ! curl -s "https://api.github.com/repos/$1/$2/releases/latest" | jq -r .tag_name; then
+    print_err "Getting $2 latest release via github api failed."
+    return 1
+  fi
+}
+
+# helper: get github repository latest tag from tags
+get_github_latest_tag() {
+  if [ $# != 2 ]; then
+    print_err "Need to two parameters. repo-author and repo-name."
+    return 1
+  fi
+
+  if ! tags=$(curl -s "https://api.github.com/repos/$1/$2/tags" | jq ".[].name" >/dev/null 2>&1); then
+    print_err "Getting $2 latest tag via github api failed."
+    return 1
+  fi
+
+  if ! echo "$tags" |
+    #grep -E -v 'beta|alpha|rc|fix' |
+    sort -r |
+    head -n 1 |
+    sed -e 's|^"||g' -e 's|"$||g'; then
+    print_err "Parsing $2 latest tag via github api failed."
+    return 1
+  fi
 }
 
 get_github_latest_version() {

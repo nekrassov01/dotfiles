@@ -231,7 +231,7 @@ fi
 if has go; then
   GOPATH=$(go env GOPATH)
   export GOPATH
-  export PATH=$PATH:$GOPATH/bin
+  export PATH=$GOPATH/bin:$PATH
   export GO111MODULE=on
   export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 fi
