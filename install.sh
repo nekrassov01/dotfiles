@@ -21,5 +21,3 @@ ensure_chezmoi() {
 }
 
 ensure_chezmoi
-export PATH="$HOME/.local/bin:$PATH"
-xcode-select --install
