@@ -33,7 +33,7 @@ fi
 
 print_info "Installing modules based on $(color green)$tool_dir/Nodefile$(color reset)"
 
-if ! npm install -g --save-dev $(cat "$tool_dir"/Nodefile) 1>/dev/null; then
+if ! npm install -g $(cat "$tool_dir"/Nodefile) 1>/dev/null; then
   print_err "Install modules based on Nodefile failed."
   exit 1
 fi
