@@ -15,6 +15,7 @@ EditorConfig.EditorConfig
 esbenp.prettier-vscode
 foxundermoon.shell-format
 GitHub.github-vscode-theme
+github.vscode-github-actions
 golang.go
 Insigne.powershell
 jetmartin.bats
