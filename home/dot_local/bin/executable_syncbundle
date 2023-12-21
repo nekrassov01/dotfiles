@@ -84,5 +84,4 @@ sync_bundle() {
   has tree && echo && tree -a "$tool_dir"
 }
 
-# run
 sync_bundle
