@@ -34,7 +34,7 @@ fi
 print_info "Unlocking strict SSL"
 
 # avoid SSL errors
-npm config set strict-ssl -g
+npm config set strict-ssl false -g
 
 print_info "Installing modules based on $(color green)$tool_dir/Nodefile$(color reset)"
 
