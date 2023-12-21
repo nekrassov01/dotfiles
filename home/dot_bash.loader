@@ -9,7 +9,19 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # load: basic path
 # Some path will be loaded after this basic path setup
+# All rewritten because it was hard to remove duplicates and maintain order
+export PATH=""
 declare -a path_list=(
+  /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+  /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin
+  /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin
+  /System/Cryptexes/App/usr/bin
+  /sbin
+  /usr/sbin
+  /usr/local/sbin
+  /bin
+  /usr/bin
+  /usr/local/bin
   "$HOME/.local/bin"
   "/opt/homebrew/bin"
 )
@@ -24,8 +36,8 @@ unset path_list
 # load: basic manual path
 # Some manpath will be loaded after this basic manual path setup
 declare -a mpath_list=(
-  "/usr/local/share/man"
   "/usr/share/man"
+  "/usr/local/share/man"
 )
 for mpath in "${mpath_list[@]}"; do
   if [[ ":$MANPATH:" != *":$mpath:"* ]]; then
