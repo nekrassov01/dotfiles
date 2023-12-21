@@ -10,7 +10,9 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # load: basic path
 # Some path will be loaded after this basic path setup
 declare -a path_list=(
+  "$HOME/.asdf/shims"
   "$HOME/.local/bin"
+  "/opt/homebrew/bin"
   "/usr/local/bin"
   "/usr/bin"
   "/bin"
