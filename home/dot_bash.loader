@@ -35,13 +35,14 @@ unset path_list
 
 # load: basic manual path
 # Some manpath will be loaded after this basic manual path setup
+export MANPATH=""
 declare -a mpath_list=(
   "/usr/share/man"
   "/usr/local/share/man"
 )
 for mpath in "${mpath_list[@]}"; do
   if [[ ":$MANPATH:" != *":$mpath:"* ]]; then
-    export MANPATH="$mpath:$MANPATH"
+    MANPATH="$mpath:$MANPATH"
   fi
 done
 export MANPATH
