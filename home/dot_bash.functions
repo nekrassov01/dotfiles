@@ -205,7 +205,11 @@ fz_ghq() {
   target=$(ghq list | fzf --phony --preview-window=70% --preview "ls -al $(ghq root)/{} | tail -n+4")
 
   if [[ -n "$target" ]]; then
-    cd "$(ghq root)/$target" || return 1
+    if has code; then
+      code "$(ghq root)/$target" || return 1
+    else
+      cd "$(ghq root)/$target" || return 1
+    fi
   fi
 }
 
