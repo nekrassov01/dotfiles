@@ -133,7 +133,7 @@ set-alias() {
   alias purge="sudo purge"
 
   # password generator
-  alias genpw='base64 </dev/urandom | fold -w 12 | head -1'
+  alias genpw='base64 </dev/urandom | tr -d '+/=' | fold -w 32 | head -1'
 
   # Kill all the tabs in Chrome to free up memory
   if [[ -e '/Applications/Google Chrome.app' ]]; then
