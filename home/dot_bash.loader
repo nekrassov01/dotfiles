@@ -199,11 +199,6 @@ if has brew; then
   export MANPATH
   unset gnumanpath
 
-  # load: chezmoi completion
-  if has chezmoi; then
-    eval "$(chezmoi completion bash)"
-  fi
-
   # load: fzf settings
   if has fzf; then
     brew_fzf_prefix=$(brew --prefix fzf)
@@ -229,6 +224,11 @@ fi
 #if [ -f "$HOME/.iterm2_shell_integration.bash" ]; then
 #    source "$HOME/.iterm2_shell_integration.bash"
 #fi
+
+# load: chezmoi completion
+if has chezmoi; then
+  eval "$(chezmoi completion bash)"
+fi
 
 # load: rancher path
 if [[ -d "$HOME/.rd" ]]; then
