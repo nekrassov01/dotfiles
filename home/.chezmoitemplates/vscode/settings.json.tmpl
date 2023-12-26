@@ -34,12 +34,18 @@
   "terminal.integrated.fontSize": 16,
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.scrollback": 65535,
-  "terminal.integrated.profiles.osx": {
+  {{ if eq .chezmoi.os "darwin" -}}"terminal.integrated.profiles.osx": {
     "pwsh": {
       "path": "pwsh",
       "icon": "terminal-powershell"
     }
-  },
+  },{{ end }}{{ if eq .chezmoi.os "windows" -}}
+  "terminal.integrated.profiles.windows": {
+    "pwsh": {
+      "path": "${env:USERPROFILE}\\scoop\\apps\\pwsh\\current\\pwsh.exe",
+      "icon": "terminal-powershell"
+    }
+  },{{ end }}
   "workbench.commandPalette.history": 65535,
   "workbench.commandPalette.preserveInput": true,
   "workbench.colorTheme": "GitHub Dark Default",
@@ -87,7 +93,7 @@
     "**/__pycache__": true,
     "**/.ipynb_checkpoints": true,
     "**/.Box*": true,
-    "**/.CFUserTextEncoding": true,
+    {{ if eq .chezmoi.os "darwin" -}}"**/.CFUserTextEncoding": true,
     "**/.DS_Store": true,
     "**/.localized": true,
     "**/.Trash*": true,
@@ -98,7 +104,39 @@
     "**/Movies": true,
     "**/Music": true,
     "**/Pictures": true,
-    "**/Public": true
+    "**/Public": true{{ end }}{{ if eq .chezmoi.os "windows" -}}
+    "**/desktop.ini": true,
+    "**/3D Objects": true,
+    "**/Application Data": true,
+    "**/Contacts": true,
+    "**/Cookies": true,
+    "**/Default.rdp": true,
+    "**/Desktop": true,
+    "**/Downloads": true,
+    "**/Favorites": true,
+    "**/IntelGraphicsProfiles": true,
+    "**/Links": true,
+    "**/Local Settings": true,
+    "**/Music": true,
+    "**/My Documents": true,
+    "**/My Music": true,
+    "**/My Pictures": true,
+    "**/My Videos": true,
+    "**/NetHood": true,
+    "**/Office のカスタム テンプレート": true,
+    "**/OneDrive": true,
+    "**/OneNote ノートブック": true,
+    "**/Pictures": true,
+    "**/PrintHood": true,
+    "**/Recent": true,
+    "**/Saved Games": true,
+    "**/Searches": true,
+    "**/SendTo": true,
+    "**/Templates": true,
+    "**/Videos": true,
+    "**/スタート メニュー": true,
+    "**/NTUSER*": true,
+    "**/ntuser*": true{{ end }}
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -127,12 +165,10 @@
   "gitlens.telemetry.enabled": false,
   "redhat.telemetry.enabled": false,
   "docker.dockerPath": "~/.rd/bin/docker",
-  "python.defaultInterpreterPath": "~/.asdf/shims/python",
   "python.languageServer": "Pylance",
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
   "black-formatter.args": ["--line-length=200"],
-  "isort.path": ["~/.asdf/shims/isort"],
   "isort.check": true,
   "notebook.markup.fontSize": 12,
   "go.formatTool": "gofmt",
@@ -182,7 +218,7 @@
   },
   "stylelint.enable": true,
   "textlint.autoFixOnSave": true,
-  "textlint.configPath": "~/.textlintrc",
+  "textlint.configPath": "~/.textlintrc.json",
   "textlint.run": "onType",
   "backlog.preview.fontSize": 12,
   "backlog.preview.lineHeight": 1.4,

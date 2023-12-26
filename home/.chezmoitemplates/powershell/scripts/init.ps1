@@ -3,11 +3,9 @@
 # Safe mode
 Set-StrictMode -Version Latest
 
-
 #
 # Variables to assign when loading profiles
 #
-
 
 # Create container of user-assigned settings
 New-Variable -Name '__Default' -Value $([ordered]@{})
@@ -20,7 +18,7 @@ $__Default.Folder.Desktop = [System.IO.Path]::Combine($HOME, 'Desktop')
 $__Default.Folder.Box = [System.IO.Path]::Combine($HOME, 'Documents', 'kawashima')
 $__Default.Folder.Project = [System.IO.Path]::Combine($HOME, 'Documents', 'kawashima', 'project')
 $__Default.Folder.Repository = [System.IO.Path]::Combine($HOME, '.repository')
-$__Default.Folder.ToolsBundle = [System.IO.Path]::Combine($HOME, '.local', 'share','chezmoi', 'tools')
+$__Default.Folder.ToolsBundle = [System.IO.Path]::Combine($HOME, '.local', 'share', 'chezmoi', 'tools')
 $__Default.Folder.ModuleList = [System.IO.Path]::Combine($__Default.Folder.ToolsBundle, 'Pwshfile')
 
 if ($IsWindows) {
@@ -33,7 +31,6 @@ else {
 #
 # Classes for 'ValidateSet' of functions
 #
-
 
 # All sub commands of AWSCLI
 class AWSCLISubCommand : System.Management.Automation.IValidateSetValuesGenerator {
