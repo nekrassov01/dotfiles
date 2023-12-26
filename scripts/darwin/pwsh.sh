@@ -18,6 +18,13 @@ print_header "Init: PowerShell configuration"
 # required: pwsh
 chk pwsh
 
+print_info "Updating PowerShell"
+
+# run: update
+if ! brew upgrade powershell --cask 1>/dev/null; then
+  print_warn "PowerShell update failed."
+fi
+
 # check: Pwshfile exists
 if [ ! -f "$tool_dir/Pwshfile" ]; then
   print_err "'$tool_dir/Pwshfile' does not exists."

@@ -35,11 +35,6 @@
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.scrollback": 65535,
   "terminal.integrated.profiles.osx": {
-    "bash": {
-      "path": "/usr/bin/env",
-      "args": ["bash", "--login"],
-      "icon": "terminal-bash"
-    },
     "pwsh": {
       "path": "pwsh",
       "icon": "terminal-powershell"
@@ -145,7 +140,11 @@
   "go.toolsManagement.autoUpdate": true,
   "go.useLanguageServer": true,
   "gopls": {
-    "build.directoryFilters": ["-**/node_modules", "-**/.git/objects", "-**/.git/subtree-cache"]
+    "build.directoryFilters": [
+      "-**/node_modules",
+      "-**/.git/objects",
+      "-**/.git/subtree-cache"
+    ]
   },
   "shellcheck.exclude": ["1090", "1091"],
   "shellcheck.ignorePatterns": {
@@ -160,7 +159,12 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "prettier.printWidth": 120,
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "css.validate": false,
   "markdown.preview.fontSize": 12,
   "markdown.preview.lineHeight": 1.4,

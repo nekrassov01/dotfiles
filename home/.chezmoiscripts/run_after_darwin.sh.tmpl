@@ -3,7 +3,7 @@
 
 export PATH="$HOME/.local/bin:$HOME/.asdf/shims:/opt/homebrew/bin:$PATH"
 
-for file in brew shell git asdf pip npm pwsh code dock defaults; do
+for file in brew shell git rtx rye npm pwsh code dock defaults restart; do
   script="$(dirname "$(chezmoi source-path)")/scripts/darwin/$file.sh"
   if [ -r "$script" ] && [ -f "$script" ];then
     sh "$script"

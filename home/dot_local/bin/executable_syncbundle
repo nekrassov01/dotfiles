@@ -15,17 +15,17 @@ get_bundle() {
     fi
   fi
 
-  if has asdf; then
-    print_info "Bundling asdf"
-    if ! cat "$HOME/.tool-versions" >"Asdffile"; then
-      print_err "Bundling asdf failed."
+  if has rtx; then
+    print_info "Bundling rtx"
+    if ! cat "$HOME/.tool-versions" >"Rtxfile"; then
+      print_err "Bundling rtx failed."
     fi
   fi
 
-  if has pip; then
-    print_info "Bundling pip"
-    if ! pip freeze >"Pyfile"; then
-      print_err "Bundling pip failed."
+  if has rye; then
+    print_info "Bundling rye"
+    if ! rye tools list -v >"Ryefile"; then
+      print_err "Bundling rye failed."
     fi
   fi
 

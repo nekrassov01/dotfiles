@@ -6,11 +6,6 @@ case $- in
 *) return ;;
 esac
 
-# load: profile
-if [[ -r "$HOME/.bash_profile" && -f "$HOME/.bash_profile" ]]; then
-  source "$HOME/.bash_profile"
-fi
-
 # load: shell option
 if has shopt; then
   for option in autocd cdable_vars cdspell direxpand dirspell dotglob extglob failglob globstar cmdhist lithist checkwinsize checkjobs; do
@@ -24,4 +19,9 @@ unset option
 if has stty; then
   stty werase undef
   bind '"\C-w": unix-filename-rubout'
+fi
+
+# load: profile
+if [[ -r "$HOME/.bash_profile" && -f "$HOME/.bash_profile" ]]; then
+  source "$HOME/.bash_profile"
 fi

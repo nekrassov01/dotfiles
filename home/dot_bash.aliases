@@ -73,12 +73,12 @@ set-alias() {
 
   # Package manager update
   has brew && alias brewup='brew -v update; brew -v upgrade; brew -v cleanup --prune=all; brew -v doctor'
-  has asdf && alias asdfup='brew -v upgrade asdf; asdf plugin update --all; asdf reshim'
-  has pip && alias pipup='pip install --upgrade pip; pip cache purge'
-  has npm && alias npmup='npm update -g npm; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm'
-  has pwsh && alias pwshup='pwsh -c Optimize-UserModule'
+  has rtx && alias rtxup='brew -v upgrade rtx; rtx upgrade; rtx reshim; rtx prune; rtx cache clear'
+  has rye && alias ryeup='rye self update'
+  has npm && alias npmup='npm update -g; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm'
+  has pwsh && alias pwshup='brew -v upgrade powershell --cask; brew pwsh -c Optimize-UserModule'
   alias swup='sudo softwareupdate --install --all'
-  alias update='has brewup && brewup; has asdfup && asdfup; has pipup && pipup; has npmup && npmup; has pwsh && pwshup'
+  alias update='has brewup && brewup; has rtxup && rtxup; has ryeup && ryeup; has npmup && npmup; has pwshup && pwshup'
 
   # Reload shell
   alias reload='clear && exec $SHELL --login'
@@ -91,7 +91,6 @@ set-alias() {
 
   # Get and delete empty files and directories
   alias emptget='find . -empty -ls'
-  alias emptdel='find . -empty -ls -delete'
 
   # directory cleanup
   alias dsscheck='find . -type f -name "*.DS_Store" -ls'
@@ -105,10 +104,8 @@ set-alias() {
   alias cacheclean='sudo rm -rfv /System/Library/Caches/* /Library/Caches/* ~/Library/Caches/*'
   alias logclean='sudo rm -rfv /private/var/log/asl/*.asl'
   alias imgclean='sudo rm -rfv /private/var/vm/sleepimage'
-  alias lsclean='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder'
-  alias sqlclean="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
-  alias spotclean='sudo mdutil -i off && sudo rm -rfv /.Spotlight-V100/ && sudo mdutil -E -i on'
-  alias cleanall='trashclean; cacheclean; logclean; imgclean; lsclean; sqlclean; spotclean;'
+  alias lsqclean="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+  alias cleanall='trashclean; cacheclean; logclean; imgclean; lsqclean;'
 
   # gui shortcuts
   alias dotshow='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
@@ -124,7 +121,7 @@ set-alias() {
   alias logoff='sudo launchctl bootout gui/$(id -u $(whoami))'
 
   # Does not work in Big Sur and/or later
-  #alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+  # alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
   # battery
   alias battery="pmset -g batt | grep -E '([0-9]+%).*' -o --colour=auto | cut -f1 -d';'"
@@ -137,7 +134,6 @@ set-alias() {
 
   # Kill all the tabs in Chrome to free up memory
   if [[ -e '/Applications/Google Chrome.app' ]]; then
-    alias chrome='open /Applications/Google\ Chrome.app/'
     alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
   fi
 
@@ -151,7 +147,6 @@ set-alias() {
   if has code; then
     alias codeext='code --list-extensions'
     alias codehome='code $HOME'
-    alias codework='code $MY_WORKING_DIR'
     alias coderepo='code $MY_REPOSITORY_DIR'
   fi
 

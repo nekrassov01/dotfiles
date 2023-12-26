@@ -199,21 +199,26 @@ if has brew; then
   export MANPATH
   unset gnumanpath
 
+  # load: chezmoi completion
+  if has chezmoi; then
+    eval "$(chezmoi completion bash)"
+  fi
+
   # load: fzf settings
   if has fzf; then
     brew_fzf_prefix=$(brew --prefix fzf)
-    if [[ ":$PATH:" != *":$brew_fzf_prefix/bin:"* ]]; then
-      PATH="$brew_fzf_prefix/bin:$PATH"
-    fi
     source "$brew_fzf_prefix/shell/completion.bash" 2>/dev/null
     source "$brew_fzf_prefix/shell/key-bindings.bash" 2>/dev/null
     unset brew_fzf_prefix
-  fi
-
-  # load: asdf settings
-  if has asdf; then
-    source "$(brew --prefix asdf)/libexec/asdf.sh"
-    source "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
+    export FZF_DEFAULT_COMMAND='ls -A'
+    export FZF_DEFAULT_OPTS='--layout=reverse --border --inline-info --height=100%'
+    if has rg; then
+      # shouldn't be used in home directory
+      export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!**/.git/*" --glob "!**/node_modules/*"'
+    fi
+    if has bat; then
+      export FZF_CTRL_T_OPTS='--preview-window=60% --preview "bat --color=always --style=header,grid --line-range :100 {}"'
+    fi
   fi
 
   # cleanup: brew path prefix
@@ -225,18 +230,14 @@ fi
 #    source "$HOME/.iterm2_shell_integration.bash"
 #fi
 
-# load: fzf
-if has fzf; then
-  export FZF_DEFAULT_COMMAND='ls -A'
-  export FZF_DEFAULT_OPTS='--layout=reverse --border --inline-info --height=60% --preview-window=70%'
+# load: rancher path
+if [[ -d "$HOME/.rd" ]]; then
+  export PATH="$HOME/.rd/bin:$PATH"
+fi
 
-  if has rg; then
-    export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-  fi
-
-  if has bat; then
-    export FZF_CTRL_T_OPTS='--preview-window=70% --preview "bat --color=always --style=header,grid --line-range :100 {}"'
-  fi
+# load: rtx settings
+if has rtx; then
+  eval "$(rtx activate bash)"
 fi
 
 # load: golang environment variable
@@ -250,12 +251,11 @@ if has go; then
   fi
 fi
 
-# load: aws_completer
-if has aws_completer; then
-  complete -C "aws_completer" aws
+# load: rye settings
+if has rye; then
+  source "$HOME/.rye/env"
+  eval "$(rye self completion)"
 fi
 
-# load: rancher settings
-if [[ -d "$HOME/.rd" ]]; then
-  export PATH="$HOME/.rd/bin:$PATH"
-fi
+# load: aws_completer
+complete -C "aws_completer" aws

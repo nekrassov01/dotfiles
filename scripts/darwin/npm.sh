@@ -16,12 +16,13 @@ tool_dir="$(dirname "$(chezmoi source-path)")/tools"
 echo
 print_header "Init: nodejs configuration"
 
-# required: asdf node npm
-chk asdf node npm
+# required: rtx node npm
+chk rtx node npm
 
 print_info "Updating npm"
 
-if ! npm update -g npm 1>/dev/null; then
+# run: update
+if ! npm update -g 1>/dev/null; then
   print_warn "npm update failed."
 fi
 
@@ -30,11 +31,6 @@ if [ ! -f "$tool_dir/Nodefile" ]; then
   print_err "'$tool_dir/Nodefile' does not exists."
   exit 1
 fi
-
-print_info "Unlocking strict SSL"
-
-# avoid SSL errors
-npm config set strict-ssl false -g
 
 print_info "Installing modules based on $(color green)$tool_dir/Nodefile$(color reset)"
 

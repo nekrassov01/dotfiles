@@ -53,6 +53,14 @@ if ! has $cmd; then
     exit 1
   fi
 
+  cmd_path="/usr/local/bin/$cmd"
+  dst_dir="$HOME/.local/bin"
+  print_info "Moving $cmd_path" to "$dst_dir/"
+
+  if [ -f "$cmd_path" ]; then
+    sudo mv "$cmd_path" "$dst_dir/"
+  fi
+
   print_info "Removing $download_file"
 
   if ! rm "$download_file"; then

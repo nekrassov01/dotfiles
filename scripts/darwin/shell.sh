@@ -32,11 +32,9 @@ fi
 print_info "Switching login shell"
 
 # run: change login shell
-if [ "$(command -v bash)" != "$bash_path_installed_by_brew" ]; then
-  if ! chsh -s "$bash_path_installed_by_brew" 1>/dev/null; then
-    print_err "Login shell switching failed."
-    exit 1
-  fi
+if ! chsh -s "$bash_path_installed_by_brew" 1>/dev/null; then
+  print_err "Login shell switching failed."
+  exit 1
 fi
 
 # closing

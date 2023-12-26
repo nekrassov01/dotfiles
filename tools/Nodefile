@@ -1,6 +1,6 @@
-aws-cdk@2.115.0
-corepack@0.22.0
-npm@10.2.5
+aws-cdk@2.116.1
+corepack@0.17.0
+npm@9.5.1
 textlint-rule-preset-ja-spacing@2.3.0
 textlint-rule-preset-ja-technical-writing@9.0.0
 textlint@13.4.1

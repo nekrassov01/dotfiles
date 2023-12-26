@@ -26,8 +26,8 @@ done 2>/dev/null &
 echo
 print_header "macOS: default configuration"
 
-# Close system preferemce before process
-osascript -e 'tell application "System Preferences" to quit'
+# Close system settings before process
+osascript -e 'tell application "System Settings" to quit'
 
 # ----------------------------------------------------------
 print_info "Setting up General UI/UX"
@@ -68,7 +68,7 @@ defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
 defaults write com.apple.TextEdit RichText -int 0
 defaults write com.apple.terminal StringEncodings -array 4
 
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+#/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
