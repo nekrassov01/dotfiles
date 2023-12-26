@@ -2,8 +2,11 @@
 
 nekrassov01's dotfiles, managed with chezmoi
 
+## Initialize
+
+Initialization in one stroke
+
 ```sh
 xcode-select --install
-/bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/nekrassov01/dotfiles/main/install.sh)"
-$HOME/.local/bin/chezmoi init "nekrassov01" --apply
+sh -c "$(curl -fsLS get.chezmoi.io/lb)" -- init --apply nekrassov01
 ```
