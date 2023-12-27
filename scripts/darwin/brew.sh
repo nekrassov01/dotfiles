@@ -8,7 +8,7 @@ if ! . "$HOME/.bash.init"; then
 fi
 
 # tools bundling directory
-tool_dir="$(dirname "$(chezmoi source-path)")/tools"
+tool_dir="$HOME/.tools"
 
 # opening
 echo

@@ -14,7 +14,7 @@ if ! . "$HOME/.bash.init"; then
 fi
 
 # tools bundling directory
-tool_dir="$(dirname "$(chezmoi source-path)")/tools"
+tool_dir="$HOME/.tools"
 
 cmd=dockutil
 
@@ -74,7 +74,7 @@ fi
 # required: $cmd
 chk "$cmd"
 
-print_info "Setting up Dock members based on $(color green)$tool_dir/Dockfile$(color reset)"
+print_info "Setting up Dock items based on $(color green)$tool_dir/Dockfile$(color reset)"
 
 # Clean up macOS Dock
 $cmd --no-restart --remove all

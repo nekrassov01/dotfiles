@@ -154,6 +154,12 @@ set-alias() {
   if has docker; then
     alias dockerclean='docker system prune -af --volumes'
   fi
+
+  # rancher desktop
+  if has rdctl; then
+    alias dockerstart='rdctl start'
+    alias dockerdown='rdctl shutdown'
+  fi
 }
 
 set-alias
