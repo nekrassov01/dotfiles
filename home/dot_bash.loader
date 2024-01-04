@@ -7,6 +7,20 @@ export LC_ALL=en_US.UTF-8
 # load: disable bash warning message
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+# get brew path
+case "$(uname -m)" in
+x86_64)
+  brew_path="$HOME/.homebrew/bin"
+  ;;
+arm64)
+  brew_path="/opt/homebrew/bin"
+  ;;
+*)
+  print_err "cannnot get brew binary path"
+  exit 1
+  ;;
+esac
+
 # load: basic path
 # Some path will be loaded after this basic path setup
 # All rewritten because it was hard to remove duplicates and maintain order
@@ -23,7 +37,7 @@ declare -a path_list=(
   /usr/bin
   /usr/local/bin
   "$HOME/.local/bin"
-  "/opt/homebrew/bin"
+  "$brew_path"
 )
 for path in "${path_list[@]}"; do
   if [[ ":$PATH:" != *":$path:"* ]]; then
@@ -244,9 +258,9 @@ if [[ -d "$HOME/.rd" ]]; then
   export PATH="$HOME/.rd/bin:$PATH"
 fi
 
-# load: rtx settings
-if has rtx; then
-  eval "$(rtx activate bash)"
+# load: mise settings
+if has mise; then
+  eval "$(mise activate bash)"
 fi
 
 # load: golang environment variable

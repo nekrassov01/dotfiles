@@ -15,8 +15,8 @@ tool_dir="$HOME/.tools"
 echo
 print_header "Init: rye configuration"
 
-# required: rtx rye
-chk rtx rye
+# required: mise rye
+chk mise rye
 
 print_info "Updating rye"
 

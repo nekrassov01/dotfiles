@@ -18,10 +18,24 @@ print_info "Installing homebrew"
 
 # install: homebrew
 if ! has brew; then
-  if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
-    print_err "brew install failed."
+  case "$(uname -m)" in
+  x86_64)
+    if ! mkdir "$HOME/.homebrew" && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C "$HOME/.homebrew"; then
+      print_err "brew install failed for x86_64."
+      exit 1
+    fi
+    ;;
+  arm64)
+    if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+      print_err "brew install failed for arm64."
+      exit 1
+    fi
+    ;;
+  *)
+    print_Err "cannot install homebrew"
     exit 1
-  fi
+    ;;
+  esac
 fi
 
 print_info "Updating homebrew"

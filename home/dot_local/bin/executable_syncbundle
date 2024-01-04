@@ -6,7 +6,7 @@ if ! . "$HOME/.bash.init"; then
   exit 1
 fi
 
-# get module lists by package manager tools: brew, rtx, rye, npm, pwsh (homemade), and code
+# get module lists by package manager tools: brew, mise, rye, npm, pwsh (homemade), and code
 get_bundle() {
 
   # brew apps dump
@@ -17,11 +17,11 @@ get_bundle() {
     fi
   fi
 
-  # rtx runtimes dump
-  if has rtx; then
-    print_info "Bundling rtx"
-    if ! rtx list --no-header >"Rtxfile"; then
-      print_err "Bundling rtx failed."
+  # mise runtimes dump
+  if has mise; then
+    print_info "Bundling mise"
+    if ! mise list --no-header >"Misefile"; then
+      print_err "Bundling mise failed."
     fi
   fi
 
@@ -66,7 +66,7 @@ get_bundle() {
   fi
 }
 
-# sync module lists by package manager tools: brew, rtx, rye, npm, pwsh (homemade), and code
+# sync module lists by package manager tools: brew, mise, rye, npm, pwsh (homemade), and code
 sync_bundle() {
 
   # check before process

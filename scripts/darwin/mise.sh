@@ -12,21 +12,21 @@ fi
 echo
 print_header "Init: asdf configuration"
 
-# required: rtx brew
-chk rtx brew
+# required: mise brew
+chk mise brew
 
-print_info "Updating rtx"
+print_info "Updating mise"
 
 # run: update
-if ! brew upgrade rtx 1>/dev/null; then
-  print_warn "rtx update failed."
+if ! brew upgrade mise 1>/dev/null; then
+  print_warn "mise update failed."
 fi
 
-print_info "Upgrading rtx"
+print_info "Upgrading mise"
 
 # run: upgrade
-if ! rtx upgrade 1>/dev/null; then
-  print_warn "rtx upgrade failed."
+if ! mise upgrade 1>/dev/null; then
+  print_warn "mise upgrade failed."
 fi
 
 # check: .tool-versions exists
@@ -35,15 +35,15 @@ if [ ! -f "$HOME/.tool-versions" ]; then
   exit 1
 fi
 
-print_info "Installing rtx tools"
+print_info "Installing mise tools"
 
 # install: plugins
-rtx install
+mise install
 
-print_info "Cleaning rtx"
+print_info "Cleaning mise"
 
-if ! rtx cache clear 1>/dev/null; then
-  print_warn "rtx cleanup failed."
+if ! mise cache clear 1>/dev/null; then
+  print_warn "mise cleanup failed."
 fi
 
 # closing

@@ -16,8 +16,8 @@ tool_dir="$HOME/.tools"
 echo
 print_header "Init: nodejs configuration"
 
-# required: rtx node npm
-chk rtx node npm
+# required: mise node npm
+chk mise node npm
 
 print_info "Updating npm"
 
