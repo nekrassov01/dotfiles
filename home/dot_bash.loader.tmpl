@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2123
 
 # load: lang
 export LANG=en_US.UTF-8
@@ -11,7 +10,7 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # load: basic path
 # Some path will be loaded after this basic path setup
 # All rewritten because it was hard to remove duplicates and maintain order
-PATH=""
+unset PATH
 declare -a path_list=(
   /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
   /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin
@@ -23,8 +22,10 @@ declare -a path_list=(
   /bin
   /usr/bin
   /usr/local/bin
-  "$HOME/.local/bin"
-  {{ if eq .chezmoi.arch "arm64" }}"/opt/homebrew/bin"{{ else }}"$HOME/.homebrew/bin"{{ end }}
+  "$HOME"/.local/bin
+  {{ if eq .chezmoi.arch "arm64" -}}
+  /opt/homebrew/bin{{ else }}$HOME/.homebrew/bin
+  {{- end }}
 )
 for path in "${path_list[@]}"; do
   if [[ ":$PATH:" != *":$path:"* ]]; then
@@ -40,7 +41,7 @@ unset path_list
 
 # load: basic manual path
 # Some manpath will be loaded after this basic manual path setup
-MANPATH=""
+unset MANPATH
 declare -a mpath_list=(
   "/usr/share/man"
   "/usr/local/share/man"
@@ -91,6 +92,11 @@ HISTIGNORE="$(
 export HISTIGNORE
 unset ignore_hist_commands
 
+# load: default editor
+if has code; then
+  export EDITOR="code"
+fi
+
 # load: basic ls color setting
 export CLICOLOR=1
 export LSCOLORS="gxfxcxdxbxegedabagacad"
@@ -111,42 +117,28 @@ else
   alias dir='ls -al'
 fi
 
-# load: default editor
-export EDITOR="code"
-
-# load: read the manual from where left off last time
-export MANPAGER="less --no-init --shift 4 --LONG-PROMPT"
-
-# load: aws cli disable pagination
-export AWS_PAGER=""
-
-# load: node repl history setting
-export NODE_REPL_HISTORY_SIZE="32768"
-
-# load: python encoding
-export PYTHONIOENCODING="UTF-8"
-
+{{ if eq .chezmoi.hostname "kawashima2" -}}
 # load: box directory
 MY_BOX_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima"
-mkdir -p "$MY_BOX_DIR" && chmod +x "$MY_BOX_DIR"
-export MY_BOX_DIR
-if [[ ! -d "$MY_BOX_DIR" ]]; then
-  ln -sfn "$MY_BOX_DIR" "$HOME/Documents/kawashima"
+if [[ ! -e "$MY_BOX_DIR" ]]; then
+  export MY_BOX_DIR
 fi
 
 # load: project directory
 MY_PROJECT_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima/project"
-mkdir -p "$MY_PROJECT_DIR" && chmod +x "$MY_PROJECT_DIR"
-export MY_PROJECT_DIR
+if [[ ! -e "$MY_PROJECT_DIR" ]]; then
+  export MY_PROJECT_DIR
+fi
+{{- end }}
 
 # load: ghq root
 MY_REPOSITORY_DIR="$HOME/.repository"
-mkdir -p "$MY_REPOSITORY_DIR" && chmod +x "$MY_REPOSITORY_DIR"
-export MY_REPOSITORY_DIR
+if [[ ! -e "$MY_REPOSITORY_DIR" ]]; then
+  export MY_REPOSITORY_DIR
+fi
 
 # load: tools installed by brew
 if has brew; then
-
   brew_prefix=$(brew --prefix)
 
   # load: Compatibility with bash completion v1
@@ -243,14 +235,10 @@ if has chezmoi; then
   eval "$(chezmoi completion bash)"
 fi
 
-# load: rancher completion
-if has rdctl; then
-  eval "$(rdctl completion bash)"
-fi
-
-# load: rancher path
+# load: rancher settings
 if [[ -d "$HOME/.rd" ]]; then
   export PATH="$HOME/.rd/bin:$PATH"
+  eval "$("$HOME"/.rd/bin/rdctl completion bash)"
 fi
 
 # load: mise settings
@@ -258,10 +246,8 @@ if has mise; then
   eval "$(mise activate bash)"
 fi
 
-# load: golang environment variable
+# load: go settings
 if has go; then
-  GOPATH="$(go env GOPATH)"
-  export GOPATH
   export GO111MODULE=on
 fi
 
@@ -269,10 +255,19 @@ fi
 if has rye; then
   source "$HOME/.rye/env"
   eval "$(rye self completion)"
+  export PYTHONIOENCODING="UTF-8"
 fi
 
-# load: aws_completer
-complete -C "aws_completer" aws
+# load: node settings
+if has node; then
+  export NODE_REPL_HISTORY_SIZE="32768"
+fi
+
+# load: aws settings
+if has aws; then
+  complete -C "aws_completer" aws
+  export AWS_PAGER=""
+fi
 
 # load: alpen completion
 if has alpen; then
