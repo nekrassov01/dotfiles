@@ -15,13 +15,22 @@ tool_dir="$HOME/.tools"
 echo
 print_header "Init: rye configuration"
 
-# required: mise rye
-chk mise rye
+# required: mise
+chk mise
+
+print_info "Getting mise tools prefix"
+
+if ! version="$(mise list rye --no-header | tr -s ' ' | cut -d ' ' -f2)"; then
+  print_err "failed to get rye path prefix"
+  exit 1
+fi
+
+cmd=$HOME/.local/share/mise/installs/rye/$version/bin/rye
 
 print_info "Updating rye"
 
 # run: update
-if ! rye self update 1>/dev/null; then
+if ! $cmd self update 1>/dev/null; then
   print_warn "rye update failed."
 fi
 
@@ -35,7 +44,7 @@ print_info "Installing modules based on $(color green)$tool_dir/Ryefile$(color r
 
 # install: based on Ryefile
 while IFS= read -r line; do
-  if ! rye install --force "$(echo "$line" | sed 's/ /==/')" 1>/dev/null; then
+  if ! $cmd install --force "$(echo "$line" | sed 's/ /==/')" 1>/dev/null; then
     print_err "$line install failed."
     exit 1
   fi

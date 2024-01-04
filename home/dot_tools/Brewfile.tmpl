@@ -33,7 +33,8 @@ brew "nekrassov01/tap/tlc3"
 cask "displaylink"
 cask "finch"
 cask "font-hackgen-nerd"
-cask "font-plemol-jp-nf"
+cask "font-plemol-jp-nf"{{ if eq .chezmoi.hostname "k11" }}
+cask "google-chrome"{{ end }}
 cask "iterm2"
 cask "kindle"
 cask "powershell"

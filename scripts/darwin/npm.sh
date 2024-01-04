@@ -16,13 +16,22 @@ tool_dir="$HOME/.tools"
 echo
 print_header "Init: nodejs configuration"
 
-# required: mise node npm
-chk mise node npm
+# required: mise
+chk mise
+
+print_info "Getting mise tools prefix"
+
+if ! version="$(mise list node --no-header | tr -s ' ' | cut -d ' ' -f2)"; then
+  print_err "failed to get node path prefix"
+  exit 1
+fi
+
+cmd=$HOME/.local/share/mise/installs/node/$version/bin/npm
 
 print_info "Updating npm"
 
 # run: update
-if ! npm update -g 1>/dev/null; then
+if ! $cmd update -g 1>/dev/null; then
   print_warn "npm update failed."
 fi
 
@@ -34,14 +43,14 @@ fi
 
 print_info "Installing modules based on $(color green)$tool_dir/Nodefile$(color reset)"
 
-if ! npm install -g $(cat "$tool_dir"/Nodefile) 1>/dev/null; then
+if ! $cmd install -g $(cat "$tool_dir"/Nodefile) 1>/dev/null; then
   print_err "Install modules based on Nodefile failed."
   exit 1
 fi
 
 print_info "Cleaning npm"
 
-if ! (npm cache clean --force >/dev/null 2>&1 && npm cache verify 1>/dev/null); then
+if ! ($cmd cache clean --force >/dev/null 2>&1 && $cmd cache verify 1>/dev/null); then
   print_warn "npm cleanup failed."
 fi
 

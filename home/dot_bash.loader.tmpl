@@ -7,20 +7,6 @@ export LC_ALL=en_US.UTF-8
 # load: disable bash warning message
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-# get brew path
-case "$(uname -m)" in
-x86_64)
-  brew_path="$HOME/.homebrew/bin"
-  ;;
-arm64)
-  brew_path="/opt/homebrew/bin"
-  ;;
-*)
-  print_err "cannnot get brew binary path"
-  exit 1
-  ;;
-esac
-
 # load: basic path
 # Some path will be loaded after this basic path setup
 # All rewritten because it was hard to remove duplicates and maintain order
@@ -37,7 +23,7 @@ declare -a path_list=(
   /usr/bin
   /usr/local/bin
   "$HOME/.local/bin"
-  "$brew_path"
+  {{ if eq .chezmoi.arch "arm64" }}"/opt/homebrew/bin"{{ else }}"$HOME/.homebrew/bin"{{ end }}
 )
 for path in "${path_list[@]}"; do
   if [[ ":$PATH:" != *":$path:"* ]]; then
