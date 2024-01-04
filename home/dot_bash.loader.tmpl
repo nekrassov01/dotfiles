@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2123
 
 # load: lang
 export LANG=en_US.UTF-8
@@ -10,7 +11,7 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # load: basic path
 # Some path will be loaded after this basic path setup
 # All rewritten because it was hard to remove duplicates and maintain order
-export PATH=""
+PATH=""
 declare -a path_list=(
   /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
   /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin
@@ -27,7 +28,11 @@ declare -a path_list=(
 )
 for path in "${path_list[@]}"; do
   if [[ ":$PATH:" != *":$path:"* ]]; then
-    PATH="$path:$PATH"
+    if [ -z "$PATH" ]; then
+      PATH="$path"
+    else
+      PATH="$path:$PATH"
+    fi
   fi
 done
 export PATH
@@ -35,14 +40,18 @@ unset path_list
 
 # load: basic manual path
 # Some manpath will be loaded after this basic manual path setup
-export MANPATH=""
+MANPATH=""
 declare -a mpath_list=(
   "/usr/share/man"
   "/usr/local/share/man"
 )
 for mpath in "${mpath_list[@]}"; do
   if [[ ":$MANPATH:" != *":$mpath:"* ]]; then
-    MANPATH="$mpath:$MANPATH"
+    if [ -z "$MANPATH" ]; then
+      MANPATH="$mpath"
+    else
+      MANPATH="$mpath:$MANPATH"
+    fi
   fi
 done
 export MANPATH
