@@ -88,12 +88,6 @@ sync_bundle() {
   cd "$tool_dir" || return 1
   get_bundle
 
-  # sync bundled items to chezmoi side
-  chezmoi_tool_dir="$(chezmoi source-path)/dot_tools"
-  if has chezmoi && [ -d "$chezmoi_tool_dir" ]; then
-    rsync -a --exclude=".archive" "$tool_dir/" "$(chezmoi source-path)/dot_tools"
-  fi
-
   # display tree of bundled items
   cd - >/dev/null 2>&1 || return 1
   has tree && echo && tree -a "$tool_dir"
