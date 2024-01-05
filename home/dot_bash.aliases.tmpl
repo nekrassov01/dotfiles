@@ -13,9 +13,6 @@ set-alias() {
   alias fgrep='grep -F --color=auto'
   alias egrep='grep -E --color=auto'
 
-  # clear host (Used to Windows)
-  alias cls='clear'
-
   # cd
   alias cd..='cd ..'
   alias ..='cd ..'
@@ -32,11 +29,8 @@ set-alias() {
   alias cp='cp -i -v'
   alias mv='mv -i -v'
   alias rf='rf -i -v'
-  alias cpr='cp -r -v'
 
   # df,du
-  alias df='df -h'
-  alias du='du -h -c'
   alias dfl='df -akh | head -n +1 && df -akh | tail -n +2 | sort -h'
   alias dul='du -sh .[^.]* ./* 2> /dev/null | sort -hr'
 
@@ -52,8 +46,8 @@ set-alias() {
 
   # Print prettier
   alias path='echo -e ${PATH//:/\\n}'
-  alias pathman='echo -e ${MANPATH//:/\\n}'
-  alias ignorehist='echo -e ${HISTIGNORE//:/\\n}'
+  alias mpath='echo -e ${MANPATH//:/\\n}'
+  alias histignore='echo -e ${HISTIGNORE//:/\\n}'
   alias user='id -a | tr "," "\n"'
   alias envs='env | sed -e "s/\=/$(color blue)\=$(color reset)/g" | sed -e "s/:/$(color red):$(color reset)/g" | sed -e "s/\//$(color yellow)\/$(color reset)/g" | sort'
 
