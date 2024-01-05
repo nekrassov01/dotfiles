@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# load: lang
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
-# load: disable bash warning message
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
 # load: basic path
 # Some path will be loaded after this basic path setup
 # All rewritten because it was hard to remove duplicates and maintain order
@@ -23,9 +16,7 @@ declare -a path_list=(
   /usr/bin
   /usr/local/bin
   "$HOME"/.local/bin
-  {{ if eq .chezmoi.arch "arm64" -}}
-  /opt/homebrew/bin{{ else }}$HOME/.homebrew/bin
-  {{- end }}
+  {{ if eq .chezmoi.arch "arm64" }}/opt/homebrew/bin{{ else }}$HOME/.homebrew/bin{{ end }}
 )
 for path in "${path_list[@]}"; do
   if [[ ":$PATH:" != *":$path:"* ]]; then
@@ -57,6 +48,13 @@ for mpath in "${mpath_list[@]}"; do
 done
 export MANPATH
 unset manpath_list
+
+# load: lang
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# load: disable bash warning message
+export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # load: prompt command
 # Some command will be loaded after this basic prompt command setup
@@ -91,11 +89,6 @@ HISTIGNORE="$(
 )"
 export HISTIGNORE
 unset ignore_hist_commands
-
-# load: default editor
-if has code; then
-  export EDITOR="code"
-fi
 
 # load: basic ls color setting
 export CLICOLOR=1
@@ -230,6 +223,11 @@ fi
 #    source "$HOME/.iterm2_shell_integration.bash"
 #fi
 
+# load: default editor
+if has code; then
+  export EDITOR="code"
+fi
+
 # load: chezmoi completion
 if has chezmoi; then
   eval "$(chezmoi completion bash)"
@@ -241,32 +239,41 @@ if [[ -d "$HOME/.rd" ]]; then
   eval "$("$HOME"/.rd/bin/rdctl completion bash)"
 fi
 
-# load: mise settings
+# load: tools installed by mise
 if has mise; then
   eval "$(mise activate bash)"
+  mise_prefix="$HOME/.local/share/mise/installs"
+
+  # load: go settings
+  if has "$mise_prefix/go/latest/go/bin/go"; then
+    export GO111MODULE=on
+  fi
+
+  # load: rye settings
+  if has "$mise_prefix/rye/latest/bin/rye"; then
+    source "$HOME/.rye/env"
+    eval "$(rye self completion)"
+    export PYTHONIOENCODING="UTF-8"
+  fi
+
+  # load: node settings
+  if has "$mise_prefix/node/latest/bin/npm"; then
+    export NODE_REPL_HISTORY_SIZE="32768"
+  fi
+
+  # load: aws settings
+  if has "$mise_prefix/awscli/latest/bin/aws"; then
+    complete -C "aws_completer" aws
+    export AWS_PAGER=""
+  fi
+
+  # cleanup: mise path prefix
+  unset mise_prefix
 fi
 
-# load: go settings
-if has go; then
-  export GO111MODULE=on
-fi
-
-# load: rye settings
-if has rye; then
-  source "$HOME/.rye/env"
-  eval "$(rye self completion)"
-  export PYTHONIOENCODING="UTF-8"
-fi
-
-# load: node settings
-if has node; then
-  export NODE_REPL_HISTORY_SIZE="32768"
-fi
-
-# load: aws settings
-if has aws; then
-  complete -C "aws_completer" aws
-  export AWS_PAGER=""
+# load: rdsc completion
+if has rdsc; then
+  eval "$(rdsc completion bash)"
 fi
 
 # load: alpen completion
@@ -277,9 +284,4 @@ fi
 # load: tlc3 completion
 if has tlc3; then
   eval "$(tlc3 --completion bash)"
-fi
-
-# load: rdsc completion
-if has rdsc; then
-  eval "$(rdsc --completion bash)"
 fi
