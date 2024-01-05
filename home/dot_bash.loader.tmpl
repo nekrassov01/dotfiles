@@ -16,30 +16,7 @@ export HISTTIMEFORMAT="%F %T "
 export HISTSIZE="32768"
 export HISTFILESIZE="$HISTSIZE"
 export HISTCONTROL="ignoreboth"
-declare -a ignore_hist_commands=(
-  "exit"
-  "bg"
-  "fg"
-  "clear"
-  "cls" # alias
-  "pwd"
-  "ls"
-  "l"   # alias
-  "ll"  # alias
-  "dir" # alias
-  "history"
-  "top"
-  "w"
-  "env"
-  "envs"   # alias
-  "reload" # alias
-)
-HISTIGNORE="$(
-  IFS=":"
-  echo "${ignore_hist_commands[*]}"
-)"
-export HISTIGNORE
-unset ignore_hist_commands
+export HISTIGNORE=exit:bg:fg:clear:pwd:ls:l:ll:history:top:w:env:envs:reload
 
 # load: basic ls color setting
 export CLICOLOR=1
