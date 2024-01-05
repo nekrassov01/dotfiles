@@ -4,96 +4,99 @@
 # Functions for fzf
 #
 
-# fzf search for ghq root
-fz_ghq() {
-  chk fzf ghq
-  local target
-  target=$(ghq list | fzf --phony --preview-window=60% --preview "ls -al $(ghq root)/{} | tail -n+4")
+if has fzf; then
 
-  if [[ -n "$target" ]]; then
-    if has code; then
-      code "$(ghq root)/$target" || return 1
-    else
-      cd "$(ghq root)/$target" || return 1
+  # fzf search for ghq root
+  fz_ghq() {
+    chk fzf ghq
+    local target
+    target=$(ghq list | fzf --phony --preview-window=60% --preview "ls -al $(ghq root)/{} | tail -n+4")
+
+    if [[ -n "$target" ]]; then
+      if has code; then
+        code "$(ghq root)/$target" || return 1
+      else
+        cd "$(ghq root)/$target" || return 1
+      fi
     fi
-  fi
-}
+  }
 
-# fzf search for ssh hosts
-fz_ssh() {
-  # required: fzf
-  chk fzf
+  # fzf search for ssh hosts
+  fz_ssh() {
+    # required: fzf
+    chk fzf
 
-  local target
+    local target
 
-  # Must include sub configs one level below
-  # shellcheck disable=SC2046,SC2002
-  target=$(
-    cat $(
-      find "$HOME/.ssh" -maxdepth 2 -type f,l -regex '.*config$' | sort
-    ) |
-      grep -i ^Host |
-      grep -v '\*' |
-      uniq |
-      awk '{print $2}' |
-      fzf
-  )
-
-  if [[ -n "$target" ]]; then
-    ssh "$target"
-  fi
-}
-
-# fzf search for aws cli reference
-fz_awscli() {
-  # required: fzf aws
-  chk fzf aws
-
-  local target url url_prefix="https://docs.aws.amazon.com/cli/latest/reference"
-
-  if [[ -z "$1" ]]; then
+    # Must include sub configs one level below
+    # shellcheck disable=SC2046,SC2002
     target=$(
-      aws help |
+      cat $(
+        find "$HOME/.ssh" -maxdepth 2 -type f,l -regex '.*config$' | sort
+      ) |
+        grep -i ^Host |
+        grep -v '\*' |
+        uniq |
+        awk '{print $2}' |
+        fzf
+    )
+
+    if [[ -n "$target" ]]; then
+      ssh "$target"
+    fi
+  }
+
+  # fzf search for aws cli reference
+  fz_awscli() {
+    # required: fzf aws
+    chk fzf aws
+
+    local target url url_prefix="https://docs.aws.amazon.com/cli/latest/reference"
+
+    if [[ -z "$1" ]]; then
+      target=$(
+        aws help |
+          col -b |
+          sed -n '/AVAILABLE SERVICES/,/SEE ALSO/p' |
+          grep 'o ' |
+          sed s/'o '//g |
+          tr -d ' ' |
+          sed -e /help/d |
+          sort |
+          fzf --preview-window=80% --preview "echo $url_prefix/{}/index.html"
+      )
+      url="$url_prefix/${target}/index.html"
+    else
+      target=$(aws "$1" help |
         col -b |
-        sed -n '/AVAILABLE SERVICES/,/SEE ALSO/p' |
+        sed -n '/AVAILABLE COMMANDS/,/()/p' |
         grep 'o ' |
-        sed s/'o '//g |
+        sed 's/o\ //g' |
         tr -d ' ' |
         sed -e /help/d |
         sort |
-        fzf --preview-window=80% --preview "echo $url_prefix/{}/index.html"
-    )
-    url="$url_prefix/${target}/index.html"
-  else
-    target=$(aws "$1" help |
-      col -b |
-      sed -n '/AVAILABLE COMMANDS/,/()/p' |
-      grep 'o ' |
-      sed 's/o\ //g' |
-      tr -d ' ' |
-      sed -e /help/d |
-      sort |
-      fzf --preview-window=60% --preview "echo $url_prefix/${1}/{}.html")
-    url="$url_prefix/${1}/${target}.html"
-  fi
+        fzf --preview-window=60% --preview "echo $url_prefix/${1}/{}.html")
+      url="$url_prefix/${1}/${target}.html"
+    fi
 
-  if [[ -n $target ]]; then
-    open "$url"
-  fi
-}
+    if [[ -n $target ]]; then
+      open "$url"
+    fi
+  }
 
-# fzf search for aws powershell reference
-fz_awspwsh() {
-  # required: fzf pwsh
-  chk fzf pwsh
+  # fzf search for aws powershell reference
+  fz_awspwsh() {
+    # required: fzf pwsh
+    chk fzf pwsh
 
-  local target url_prefix="https://docs.aws.amazon.com/powershell/latest/reference/items"
-  target=$(pwsh -c "(Get-AWSCmdletName).CmdletName" | fzf --preview "echo $url_prefix/{}.html")
+    local target url_prefix="https://docs.aws.amazon.com/powershell/latest/reference/items"
+    target=$(pwsh -c "(Get-AWSCmdletName).CmdletName" | fzf --preview "echo $url_prefix/{}.html")
 
-  if [[ -n $target ]]; then
-    open "$url_prefix/${target}.html"
-  fi
-}
+    if [[ -n $target ]]; then
+      open "$url_prefix/${target}.html"
+    fi
+  }
+fi
 
 #
 # Functions for utility

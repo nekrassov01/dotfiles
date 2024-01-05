@@ -7,7 +7,7 @@ case $- in
 esac
 
 # load: shell option
-if command -v shopt >/dev/null 2>&1; then
+if command -v shopt &>/dev/null; then
   for option in autocd cdable_vars cdspell direxpand dirspell dotglob extglob failglob globstar cmdhist lithist checkwinsize checkjobs; do
     shopt -s "$option" 2>/dev/null
   done
@@ -16,7 +16,7 @@ unset option
 
 # load: tty settings
 # Delete the word behind point on terminal, using '/' as the word boundaries
-if command -v stty >/dev/null 2>&1; then
+if command -v stty &>/dev/null; then
   stty werase undef
   bind '"\C-w": unix-filename-rubout'
 fi

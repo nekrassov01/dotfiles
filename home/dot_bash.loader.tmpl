@@ -1,54 +1,5 @@
 #!/usr/bin/env bash
 
-# load: basic path
-# Some path will be loaded after this basic path setup
-# All rewritten because it was hard to remove duplicates and maintain order
-unset PATH
-declare -a path_list=(
-  /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
-  /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin
-  /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin
-  /System/Cryptexes/App/usr/bin
-  /sbin
-  /usr/sbin
-  /usr/local/sbin
-  /bin
-  /usr/bin
-  /usr/local/bin
-  "$HOME"/.local/bin
-  {{ if eq .chezmoi.arch "arm64" }}/opt/homebrew/bin{{ else }}$HOME/.homebrew/bin{{ end }}
-)
-for path in "${path_list[@]}"; do
-  if [[ ":$PATH:" != *":$path:"* ]]; then
-    if [ -z "$PATH" ]; then
-      PATH="$path"
-    else
-      PATH="$path:$PATH"
-    fi
-  fi
-done
-export PATH
-unset path_list
-
-# load: basic manual path
-# Some manpath will be loaded after this basic manual path setup
-unset MANPATH
-declare -a mpath_list=(
-  "/usr/share/man"
-  "/usr/local/share/man"
-)
-for mpath in "${mpath_list[@]}"; do
-  if [[ ":$MANPATH:" != *":$mpath:"* ]]; then
-    if [ -z "$MANPATH" ]; then
-      MANPATH="$mpath"
-    else
-      MANPATH="$mpath:$MANPATH"
-    fi
-  fi
-done
-export MANPATH
-unset manpath_list
-
 # load: lang
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -110,25 +61,8 @@ else
   alias dir='ls -al'
 fi
 
-{{ if eq .chezmoi.hostname "kawashima2" -}}
-# load: box directory
-MY_BOX_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima"
-if [[ ! -e "$MY_BOX_DIR" ]]; then
-  export MY_BOX_DIR
-fi
-
-# load: project directory
-MY_PROJECT_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima/project"
-if [[ ! -e "$MY_PROJECT_DIR" ]]; then
-  export MY_PROJECT_DIR
-fi
-{{- end }}
-
-# load: ghq root
-MY_REPOSITORY_DIR="$HOME/.repository"
-if [[ ! -e "$MY_REPOSITORY_DIR" ]]; then
-  export MY_REPOSITORY_DIR
-fi
+# load: basic path
+PATH="$HOME"/.local/bin:{{ if eq .chezmoi.arch "arm64" }}/opt/homebrew/bin{{ else }}"$HOME"/.homebrew/bin{{ end }}:$PATH
 
 # load: tools installed by brew
 if has brew; then
@@ -138,26 +72,6 @@ if has brew; then
   if [[ -d "$brew_prefix/etc/bash_completion.d" ]]; then
     export BASH_COMPLETION_COMPAT_DIR="$brew_prefix/etc/bash_completion.d"
   fi
-
-  # -----------------------------------------------------------------
-  #  NOTE:
-  #  docker installed with rancher-desktop throws an error message
-  #  when loading the completion script, so I commented it out.
-  #  ISSUE:
-  #  https://github.com/rancher-sandbox/rancher-desktop/issues/1260
-  # -----------------------------------------------------------------
-
-  ## load: docker completion
-  #if has docker; then
-  #  curl -fsSL "https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker" \
-  #    -o "$BASH_COMPLETION_COMPAT_DIR/docker.sh"
-  #fi
-
-  ## load: docker-compose completion
-  #if has docker-compose; then
-  #  curl -fsSL "https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose" \
-  #    -o "$BASH_COMPLETION_COMPAT_DIR/docker-compose.sh"
-  #fi
 
   # load: scripts under profile.d
   for prof in "$brew_prefix/etc/profile.d/"*.sh; do
@@ -177,20 +91,18 @@ if has brew; then
 
   # load: gnu tools path
   for gnubinpath in "$brew_prefix"/opt/{coreutils,findutils,gnu-sed,gnu-tar,grep}/libexec/gnubin; do
-    if [[ -e "$gnubinpath" && -r "$gnubinpath" && ":$PATH:" != *":$gnubinpath:"* ]]; then
+    if [[ -e "$gnubinpath" && -r "$gnubinpath" ]]; then
       PATH="$gnubinpath:$PATH"
     fi
   done
-  export PATH
   unset gnubinpath
 
   # load: gnu man path
   for gnumanpath in "$brew_prefix"/opt/{coreutils,findutils,gnu-sed,gnu-tar,grep}/libexec/gnuman; do
-    if [[ -e "$gnumanpath" && -r "$gnumanpath" && ":$MANPATH:" != *":$gnumanpath:"* ]]; then
+    if [[ -e "$gnumanpath" && -r "$gnumanpath" ]]; then
       MANPATH="$gnumanpath:$MANPATH"
     fi
   done
-  export MANPATH
   unset gnumanpath
 
   # load: fzf completion
@@ -239,36 +151,39 @@ if [[ -d "$HOME/.rd" ]]; then
   eval "$("$HOME"/.rd/bin/rdctl completion bash)"
 fi
 
+# load: docker settings
+if has docker; then
+  eval "$(docker completion bash)"
+fi
+
 # load: tools installed by mise
 if has mise; then
   eval "$(mise activate bash)"
-  mise_prefix="$HOME/.local/share/mise/installs"
+fi
 
-  # load: go settings
-  if has "$mise_prefix/go/latest/go/bin/go"; then
-    export GO111MODULE=on
-  fi
+# load: go settings
+if has go; then
+  export GO111MODULE=on
+fi
 
-  # load: rye settings
-  if has "$mise_prefix/rye/latest/bin/rye"; then
-    source "$HOME/.rye/env"
-    eval "$(rye self completion)"
-    export PYTHONIOENCODING="UTF-8"
-  fi
+# load: rye settings
+if has rye; then
+  # Manually add to path to maintain order
+  # source "$HOME/.rye/env"
+  PATH=$HOME/.rye/shims:$PATH
+  eval "$(rye self completion)"
+  export PYTHONIOENCODING="UTF-8"
+fi
 
-  # load: node settings
-  if has "$mise_prefix/node/latest/bin/npm"; then
-    export NODE_REPL_HISTORY_SIZE="32768"
-  fi
+# load: node settings
+if has node; then
+  export NODE_REPL_HISTORY_SIZE="32768"
+fi
 
-  # load: aws settings
-  if has "$mise_prefix/awscli/latest/bin/aws"; then
-    complete -C "aws_completer" aws
-    export AWS_PAGER=""
-  fi
-
-  # cleanup: mise path prefix
-  unset mise_prefix
+# load: aws settings
+if has aws; then
+  complete -C "aws_completer" aws
+  export AWS_PAGER=""
 fi
 
 # load: rdsc completion
@@ -285,3 +200,63 @@ fi
 if has tlc3; then
   eval "$(tlc3 --completion bash)"
 fi
+
+# optimize: PATH
+_path=""
+for _p in $(echo "$PATH" | tr ':' ' '); do
+  case ":${_path}:" in
+  *:"${_p}":*) ;;
+  *)
+    if [ "$_path" ]; then
+      _path="$_path:$_p"
+    else
+      _path=$_p
+    fi
+    ;;
+  esac
+done
+PATH=$_path
+
+export PATH
+unset _p
+unset _path
+
+# optimize: MANPATH
+_manpath=""
+for _mp in $(echo "$MANPATH" | tr ':' ' '); do
+  case ":${_manpath}:" in
+  *:"${_mp}":*) ;;
+  *)
+    if [ "$_manpath" ]; then
+      _manpath="$_manpath:$_mp"
+    else
+      _manpath=$_mp
+    fi
+    ;;
+  esac
+done
+MANPATH=$_manpath
+
+export MANPATH
+unset _mp
+unset _manpath
+
+# load: ghq root
+MY_REPOSITORY_DIR="$HOME/.repository"
+if [[ ! -e "$MY_REPOSITORY_DIR" ]]; then
+  export MY_REPOSITORY_DIR
+fi
+
+{{ if eq .chezmoi.hostname "kawashima2" -}}
+# load: box directory
+MY_BOX_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima"
+if [[ ! -e "$MY_BOX_DIR" ]]; then
+  export MY_BOX_DIR
+fi
+
+# load: project directory
+MY_PROJECT_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima/project"
+if [[ ! -e "$MY_PROJECT_DIR" ]]; then
+  export MY_PROJECT_DIR
+fi
+{{- end }}

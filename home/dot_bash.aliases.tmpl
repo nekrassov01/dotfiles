@@ -28,11 +28,6 @@ set-alias() {
   alias dl='cd ~/Downloads'
   alias desk='cd ~/Desktop'
 
-  # cd working directory
-  alias box='cd $MY_BOX_DIR'
-  alias pj='cd $MY_PROJECT_DIR'
-  alias repo='cd $MY_REPOSITORY_DIR'
-
   # cp,mv,rf
   alias cp='cp -i -v'
   alias mv='mv -i -v'
@@ -160,6 +155,11 @@ set-alias() {
     alias dockerstart='rdctl start'
     alias dockerdown='rdctl shutdown'
   fi
+
+  # cd working directory
+  [[ -e $MY_REPOSITORY_DIR ]] && alias repo='cd $MY_REPOSITORY_DIR'{{ if eq .chezmoi.hostname "kawashima2" }}
+  [[ -e $MY_BOX_DIR ]] && alias box='cd $MY_BOX_DIR'{{ end }}{{ if eq .chezmoi.hostname "kawashima2" }}
+  [[ -e $MY_PROJECT_DIR ]] && alias pj='cd $MY_PROJECT_DIR'{{ end }}
 }
 
 set-alias
