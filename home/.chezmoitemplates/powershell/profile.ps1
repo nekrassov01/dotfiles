@@ -3,15 +3,15 @@
 $scripts = @(
   "init"
   "readline"
-  "prompt"
   "modules"
   "web"
   "utilities"
   "variables"
   "aliases"
+  "prompt"
 )
 
 #Load sub modules
 foreach ($script in $scripts) {
-  . $([System.IO.Path]::Combine($PSScriptRoot, 'scripts', $("{0}.ps1" -f $script)))
+  . $([System.IO.Path]::Combine($PSScriptRoot, 'profile.d', $("{0}.ps1" -f $script)))
 }
