@@ -33,19 +33,22 @@
   "terminal.integrated.fontFamily": "'PlemolJP Console NF', 'HackGen Console NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
   "terminal.integrated.fontSize": 16,
   "terminal.integrated.copyOnSelection": true,
-  "terminal.integrated.scrollback": 65535,{{ if eq .chezmoi.os "darwin" }}
+  "terminal.integrated.scrollback": 65535,
+  {{ if eq .chezmoi.os "darwin" -}}
   "terminal.integrated.profiles.osx": {
     "pwsh": {
       "path": "pwsh",
       "icon": "terminal-powershell"
     }
-  },{{ end }}{{ if eq .chezmoi.os "windows" }}
+  },
+  {{- end -}}
+  {{- if eq .chezmoi.os "windows" -}}
   "terminal.integrated.profiles.windows": {
     "pwsh": {
       "path": "${env:USERPROFILE}\\scoop\\apps\\pwsh\\current\\pwsh.exe",
       "icon": "terminal-powershell"
     }
-  },{{ end }}
+  },{{- end }}
   "workbench.commandPalette.history": 65535,
   "workbench.commandPalette.preserveInput": true,
   "workbench.colorTheme": "GitHub Dark Default",
@@ -59,9 +62,6 @@
   "workbench.tree.indent": 20,
   "workbench.view.alwaysShowHeaderActions": true,
   "files.associations": {
-    "**/*rc": "properties",
-    "**/.bash*": "shellscript",
-    "**/*.bats": "bats",
     "**/git/attributes": "properties",
     "**/git/config": "properties",
     "**/git/ignore": "ignore",
@@ -70,10 +70,12 @@
     "**/.ssh/include/*": "ssh-config",
     "**/*.backlog": "backlog",
     "**/*.bl": "backlog",
+    "**/*rc": "properties",
+    "**/.bash*": "shellscript",
+    "**/*.bats": "bats",
     "**/.hushlogin": "plaintext",
     "**/.tool-versions": "properties",
     "**/.shellspec": "properties",
-    "**/.bundle*/**/*file": "properties"
   },
   "files.eol": "\n",
   "files.hotExit": "off",
@@ -92,7 +94,8 @@
     "**/.wget-hsts": true,
     "**/__pycache__": true,
     "**/.ipynb_checkpoints": true,
-    "**/.Box*": true,{{ if eq .chezmoi.os "darwin" }}
+    "**/.Box*": true,
+    {{ if eq .chezmoi.os "darwin" -}}
     "**/.CFUserTextEncoding": true,
     "**/.DS_Store": true,
     "**/.localized": true,
@@ -104,7 +107,9 @@
     "**/Movies": true,
     "**/Music": true,
     "**/Pictures": true,
-    "**/Public": true{{ end }}{{ if eq .chezmoi.os "windows" }}
+    "**/Public": true
+    {{- end -}}
+    {{- if eq .chezmoi.os "windows" -}}
     "**/desktop.ini": true,
     "**/3D Objects": true,
     "**/Application Data": true,
@@ -136,7 +141,8 @@
     "**/Videos": true,
     "**/スタート メニュー": true,
     "**/NTUSER*": true,
-    "**/ntuser*": true{{ end }}
+    "**/ntuser*": true
+    {{- end }}
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -171,8 +177,10 @@
   "black-formatter.args": ["--line-length=200"],
   "isort.check": true,
   "notebook.markup.fontSize": 12,
+  {{ if eq .chezmoi.os "darwin" -}}
   "go.gopath": "~/.local/share/mise/installs/go/latest/packages",
   "go.goroot": "~/.local/share/mise/installs/go/latest/go",
+  {{- end }}
   "go.formatTool": "gofmt",
   "go.lintTool": "golangci-lint",
   "go.toolsManagement.autoUpdate": true,
