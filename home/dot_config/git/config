@@ -7,7 +7,11 @@
 	l = log -n 20 --color --abbrev-commit --oneline
 	graph = log -n 20 --color --abbrev-commit --graph
 [credential "https://github.com"]
-	helper = osxkeychain
+	helper =
+	helper = !'gh.exe' auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !'gh.exe' auth git-credential
 [core]
 	editor = code --wait
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
