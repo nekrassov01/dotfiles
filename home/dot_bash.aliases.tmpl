@@ -65,7 +65,7 @@ set-alias() {
   has mise && alias miseup='brew -v upgrade mise; mise upgrade; mise reshim; mise prune; mise cache clear'
   has rye && alias ryeup='rye self update'
   has npm && alias npmup='npm update -g; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm'
-  has pwsh && alias pwshup='brew -v upgrade powershell --cask; brew pwsh -c Optimize-UserModule'
+  has pwsh && alias pwshup='brew -v upgrade powershell --cask; pwsh -c Optimize-UserModule'
   alias swup='sudo softwareupdate --install --all'
   alias update='has brewup && brewup; has miseup && miseup; has ryeup && ryeup; has npmup && npmup; has pwshup && pwshup'
 
