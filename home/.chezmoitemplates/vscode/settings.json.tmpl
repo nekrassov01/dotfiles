@@ -5,7 +5,7 @@
   "editor.emptySelectionClipboard": false,
   "editor.foldingMaximumRegions": 32768,
   "editor.fontFamily": "'Monaspace Neon', 'PlemolJP Console NF', 'HackGen Console NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
-  "editor.fontSize": 18,
+  "editor.fontSize": 16,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.guides.bracketPairs": true,
@@ -75,7 +75,7 @@
     "**/*.bats": "bats",
     "**/.hushlogin": "plaintext",
     "**/.tool-versions": "properties",
-    "**/.shellspec": "properties",
+    "**/.shellspec": "properties"
   },
   "files.eol": "\n",
   "files.hotExit": "off",
@@ -173,13 +173,16 @@
   "docker.dockerPath": "~/.rd/bin/docker",
   "python.languageServer": "Pylance",
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.typeCheckingMode": "basic",
-  "black-formatter.args": ["--line-length=200"],
-  "isort.check": true,
+  "python.analysis.typeCheckingMode": "strict",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportCallIssue": "none",
+    "reportUnknownMemberType": "none",
+    "reportUnknownArgumentType": "none"
+  },
   "notebook.markup.fontSize": 12,
   {{ if eq .chezmoi.os "darwin" -}}
   "go.gopath": "~/.local/share/mise/installs/go/latest/packages",
-  "go.goroot": "~/.local/share/mise/installs/go/latest/go",
+  "go.goroot": "~/.local/share/mise/installs/go/latest",
   {{- end }}
   "go.formatTool": "gofmt",
   "go.lintTool": "golangci-lint",
@@ -244,10 +247,14 @@
     "editor.defaultFormatter": "golang.go"
   },
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.bracketPairColorization.enabled": false,
     "editor.guides.bracketPairs": false,
-    "editor.tabSize": 4
+    "editor.tabSize": 4,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
   },
   "[json][jsonc]": {
     "editor.tabSize": 4
