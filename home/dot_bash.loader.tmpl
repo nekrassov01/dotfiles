@@ -119,6 +119,7 @@ fi
 # load: rancher settings
 if [[ -d "$HOME/.rd" ]]; then
   export PATH="$HOME/.rd/bin:$PATH"
+  export DOCKER_HOST="unix://$HOME/.rd/docker.sock
   eval "$("$HOME"/.rd/bin/rdctl completion bash)"
 fi
 
@@ -155,11 +156,6 @@ fi
 if has aws; then
   complete -C "aws_completer" aws
   export AWS_PAGER=""
-fi
-
-# load: rdsc completion
-if has rdsc; then
-  eval "$(rdsc completion bash)"
 fi
 
 # load: alpen completion
