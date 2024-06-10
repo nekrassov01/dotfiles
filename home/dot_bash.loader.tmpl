@@ -119,7 +119,7 @@ fi
 # load: rancher settings
 if [[ -d "$HOME/.rd" ]]; then
   export PATH="$HOME/.rd/bin:$PATH"
-  export DOCKER_HOST="unix://$HOME/.rd/docker.sock
+  export DOCKER_HOST="unix://$HOME/.rd/docker.sock"
   eval "$("$HOME"/.rd/bin/rdctl completion bash)"
 fi
 
