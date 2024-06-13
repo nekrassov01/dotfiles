@@ -173,11 +173,9 @@
   "docker.dockerPath": "~/.rd/bin/docker",
   "python.languageServer": "Pylance",
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.typeCheckingMode": "strict",
+  "python.analysis.typeCheckingMode": "basic",
   "python.analysis.diagnosticSeverityOverrides": {
-    "reportCallIssue": "none",
-    "reportUnknownMemberType": "none",
-    "reportUnknownArgumentType": "none"
+    "reportCallIssue": "none"
   },
   "notebook.markup.fontSize": 12,
   {{ if eq .chezmoi.os "darwin" -}}
@@ -189,11 +187,7 @@
   "go.toolsManagement.autoUpdate": true,
   "go.useLanguageServer": true,
   "gopls": {
-    "build.directoryFilters": [
-      "-**/node_modules",
-      "-**/.git/objects",
-      "-**/.git/subtree-cache"
-    ]
+    "build.directoryFilters": ["-**/node_modules", "-**/.git/objects", "-**/.git/subtree-cache"]
   },
   "shellcheck.exclude": ["1090", "1091"],
   "shellcheck.ignorePatterns": {
@@ -208,13 +202,9 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "prettier.printWidth": 120,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "css.validate": false,
+  "yaml.schemaStore.enable": false,
   "markdown.preview.fontSize": 12,
   "markdown.preview.lineHeight": 1.4,
   "markdown.preview.breaks": true,
