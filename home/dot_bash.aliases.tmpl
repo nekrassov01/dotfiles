@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set-alias() {
-
   # sudo
   alias sudo='sudo '
 
@@ -62,10 +61,10 @@ set-alias() {
 
   # Package manager update
   has brew && alias brewup='brew -v update; brew -v upgrade; brew -v cleanup --prune=all; brew -v doctor'
-  has mise && alias miseup='brew -v upgrade mise; mise upgrade; mise reshim; mise prune; mise cache clear'
-  has rye && alias ryeup='rye self update'
-  has npm && alias npmup='npm update -g; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm'
   has pwsh && alias pwshup='brew -v upgrade powershell --cask; pwsh -c Optimize-UserModule'
+  has mise && alias miseup='brew -v upgrade mise; mise upgrade; mise reshim; mise prune; mise cache clear'
+  has mise && mise where rye@latest &>/dev/null && alias ryeup='rye self update'                                                                      # installed by mise
+  has mise && mise where node@latest &>/dev/null && alias npmup='npm update -g; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm' # installed by mise
   alias swup='sudo softwareupdate --install --all'
   alias update='has brewup && brewup; has miseup && miseup; has ryeup && ryeup; has npmup && npmup; has pwshup && pwshup'
 
@@ -119,15 +118,15 @@ set-alias() {
   alias purge="sudo purge"
 
   # password generator
-  alias genpw='base64 </dev/urandom | tr -d '+/=' | fold -w 32 | head -1'
+  alias genpw='base64 /dev/urandom | tr -d -c "[:alnum:]" | fold -w 64 | head -10'
 
   # Kill all the tabs in Chrome to free up memory
   if [[ -e '/Applications/Google Chrome.app' ]]; then
     alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
   fi
 
-  # aws
-  if has aws; then
+  # aws (installed by mise)
+  if has mise && mise where awscli@latest &>/dev/null; then
     alias a='aws sts get-caller-identity --output text --query Account'
     alias awsconf='aws configure list'
   fi
