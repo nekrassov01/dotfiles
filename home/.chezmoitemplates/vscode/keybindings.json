@@ -1,12 +1,27 @@
 [
-    {
-        "key": "cmd+[Semicolon]",
-        "command": "workbench.action.terminal.focus",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "cmd+[Semicolon]",
-        "command": "workbench.action.focusFirstEditorGroup",
-        "when": "terminalFocus"
-    }
+  {
+    "key": "cmd+[Semicolon]",
+    "command": "workbench.action.terminal.focus",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+[Semicolon]",
+    "command": "workbench.explorer.fileView.focus",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+[Semicolon]",
+    "command": "workbench.action.focusFirstEditorGroup",
+    "when": "explorerViewletFocus"
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "workbench.action.nextEditor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+shift+j",
+    "command": "workbench.action.previousEditor",
+    "when": "editorTextFocus"
+  }
 ]
