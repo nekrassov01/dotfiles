@@ -4,7 +4,7 @@
   "editor.detectIndentation": false,
   "editor.emptySelectionClipboard": false,
   "editor.foldingMaximumRegions": 32768,
-  "editor.fontFamily": "'Monaspace Neon', 'PlemolJP Console NF', 'HackGen Console NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "'Udev gothic 35NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
   "editor.fontSize": 16,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
@@ -29,8 +29,8 @@
   "explorer.incrementalNaming": "smart",
   "explorer.sortOrder": "type",
   "explorer.sortOrderLexicographicOptions": "unicode",
-  "terminal.external.osxExec": "iTerm.app",
-  "terminal.integrated.fontFamily": "'Monaspace Neon', 'PlemolJP Console NF', 'HackGen Console NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
+  "terminal.external.osxExec": "Ghostty.app",
+  "terminal.integrated.fontFamily": "'Udev gothic 35NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.scrollback": 65535,
@@ -75,7 +75,9 @@
     "**/*.bats": "bats",
     "**/.hushlogin": "plaintext",
     "**/.tool-versions": "properties",
-    "**/.shellspec": "properties"
+    "**/.shellspec": "properties",
+    "*.yml": "yaml",
+    "*.tmpl": "go-template"
   },
   "files.eol": "\n",
   "files.hotExit": "off",
@@ -168,16 +170,12 @@
   "security.workspace.trust.untrustedFiles": "open",
   "telemetry.telemetryLevel": "off",
   "git.openRepositoryInParentFolders": "never",
+  "gitlens.rebaseEditor.ordering": "asc",
   "gitlens.telemetry.enabled": false,
   "redhat.telemetry.enabled": false,
   "docker.dockerPath": "~/.rd/bin/docker",
   "python.languageServer": "Pylance",
-  "python.terminal.activateEnvironment": false,
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.typeCheckingMode": "basic",
-  "python.analysis.diagnosticSeverityOverrides": {
-    "reportCallIssue": "none"
-  },
   "notebook.markup.fontSize": 12,
   {{ if eq .chezmoi.os "darwin" -}}
   "go.gopath": "~/.local/share/mise/installs/go/latest/packages",
@@ -192,9 +190,7 @@
   },
   "shellcheck.exclude": ["1090", "1091"],
   "shellcheck.ignorePatterns": {
-    "**/.iterm2_shell_integration.bash": true,
-    "**/Box-Box": true,
-    "**/msp-tools": true
+    "**/Box-Box": true
   },
   "shellformat.effectLanguages": ["shellscript", "bats"],
   "powershell.codeFormatting.preset": "Stroustrup",
@@ -206,6 +202,25 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "css.validate": false,
   "yaml.schemaStore.enable": false,
+  "yaml.customTags": [
+    "!And",
+    "!If",
+    "!Not",
+    "!Equals",
+    "!Or",
+    "!FindInMap sequence",
+    "!Base64",
+    "!Cidr",
+    "!Ref",
+    "!Sub",
+    "!GetAtt",
+    "!GetAZs",
+    "!ImportValue",
+    "!Select",
+    "!Select sequence",
+    "!Split",
+    "!Join sequence"
+  ],
   "markdown.preview.fontSize": 12,
   "markdown.preview.lineHeight": 1.4,
   "markdown.preview.breaks": true,
@@ -226,7 +241,7 @@
   "backlog.preview.lineHeight": 1.4,
   "[go][go.mod][makefile]": {
     "editor.insertSpaces": false,
-    "editor.tabSize": 4
+    "editor.tabSize": 8
   },
   "[go]": {
     "editor.defaultFormatter": "golang.go",
@@ -238,20 +253,18 @@
     "editor.defaultFormatter": "golang.go"
   },
   "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.bracketPairColorization.enabled": false,
     "editor.guides.bracketPairs": false,
-    "editor.tabSize": 4,
+    "editor.bracketPairColorization.enabled": false,
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
-      "source.fixAll.ruff": "explicit",
-      "source.organizeImports.ruff": "explicit"
-    }
-  },
-  "[json][jsonc]": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
     "editor.tabSize": 4
   },
-  "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+  "[yaml][github-actions-workflow][dockercompose]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.tabSize": 2
   },
   "[shellscript][bats]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
@@ -262,7 +275,10 @@
   "[markdown]": {
     "editor.defaultFormatter": "yzhang.markdown-all-in-one",
     "editor.wordWrap": "off",
-    "editor.fontFamily": "'PlemolJP Console NF', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontFamily": "'Udev gothic NF', Menlo, Monaco, 'Courier New', monospace",
     "files.trimTrailingWhitespace": false
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
   }
 }

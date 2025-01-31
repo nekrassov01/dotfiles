@@ -1,11 +1,8 @@
 [alias]
 	s = status -s -b
-	aa = add .
-	c = clone --recursive
-	br = branch
-	co = checkout
+	a = add .
 	l = log -n 20 --color --abbrev-commit --oneline
-	graph = log -n 20 --color --abbrev-commit --graph
+	g = log -n 20 --color --abbrev-commit --graph
 {{ if eq .chezmoi.os "darwin" -}}
 [credential "https://github.com"]
 	helper = osxkeychain
@@ -13,13 +10,10 @@
 [credential "https://github.com"]
 	helper =
 	helper = !'gh.exe' auth git-credential
-[credential "https://gist.github.com"]
-	helper =
-	helper = !'gh.exe' auth git-credential
 {{- end }}
 [core]
 	editor = code --wait
-	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+	whitespace = space-before-tab,trailing-space
 	trustctime = false
 	precomposeunicode = true
 	quotepath = false
@@ -42,3 +36,10 @@
 	autocorrect = 1
 [ghq]
 	root = ~/.repository
+[user]
+	name = nekrassov01
+	email = unclek62@gmail.com
+[includeIf "gitdir:~/.repository/github.com/nekrassov01/"]
+  path = ~/.config/git/config.nekrassov01
+[includeIf "gitdir:~/.repository/github.com/organization/"]
+  path = ~/.config/git/config.organization

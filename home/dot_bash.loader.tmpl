@@ -39,11 +39,6 @@ PATH="$HOME"/.local/bin:{{ if eq .chezmoi.arch "arm64" }}/opt/homebrew/bin{{ els
 if has brew; then
   brew_prefix=$(brew --prefix)
 
-  # load: Compatibility with bash completion v1
-  if [[ -d "$brew_prefix/etc/bash_completion.d" ]]; then
-    export BASH_COMPLETION_COMPAT_DIR="$brew_prefix/etc/bash_completion.d"
-  fi
-
   # load: scripts under profile.d
   for prof in "$brew_prefix/etc/profile.d/"*.sh; do
     if [[ -r "$prof" ]]; then
@@ -52,13 +47,18 @@ if has brew; then
   done
   unset prof
 
-  # load: scripts under bash_completion.d
-  for comp in "$brew_prefix/etc/bash_completion.d/"*; do
-    if [[ -r "$comp" ]]; then
-      source "$comp"
-    fi
-  done
-  unset comp
+  # load: Compatibility with bash completion v1
+  if [[ -d "$brew_prefix/etc/bash_completion.d" ]]; then
+    export BASH_COMPLETION_COMPAT_DIR="$brew_prefix/etc/bash_completion.d"
+  fi
+
+  #  # load: scripts under bash_completion.d
+  #  for comp in "$brew_prefix/etc/bash_completion.d/"*; do
+  #    if [[ -r "$comp" ]]; then
+  #      source "$comp"
+  #    fi
+  #  done
+  #  unset comp
 
   # load: gnu tools path
   for gnubinpath in "$brew_prefix"/opt/{coreutils,findutils,gnu-sed,gnu-tar,grep}/libexec/gnubin; do
@@ -149,6 +149,7 @@ fi
 
 # load: node settings
 if has node; then
+  eval "$(npm completion)"
   export NODE_REPL_HISTORY_SIZE="32768"
 fi
 
