@@ -1,5 +1,0 @@
-[default]
-region = ap-northeast-1
-output = json
-cli_pager =
-cli_auto_prompt = on-partial
