@@ -3,14 +3,6 @@
 	a = add .
 	l = log -n 20 --color --abbrev-commit --oneline
 	g = log -n 20 --color --abbrev-commit --graph
-{{ if eq .chezmoi.os "darwin" -}}
-[credential "https://github.com"]
-	helper = osxkeychain
-{{- else if eq .chezmoi.os "windows" -}}
-[credential "https://github.com"]
-	helper =
-	helper = !'gh.exe' auth git-credential
-{{- end }}
 [core]
 	editor = code --wait
 	whitespace = space-before-tab,trailing-space
