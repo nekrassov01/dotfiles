@@ -4,10 +4,8 @@
   "editor.detectIndentation": false,
   "editor.emptySelectionClipboard": false,
   "editor.foldingMaximumRegions": 32768,
-  "editor.fontFamily": "'Udev gothic 35NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "'MoralerSpace Neon NF', 'Google Sans Code', 'Udev gothic 35NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
   "editor.fontSize": 16,
-  "editor.formatOnSave": true,
-  "editor.formatOnType": true,
   "editor.guides.bracketPairs": true,
   "editor.minimap.enabled": false,
   "editor.mouseWheelZoom": true,
@@ -30,7 +28,7 @@
   "explorer.sortOrder": "type",
   "explorer.sortOrderLexicographicOptions": "unicode",
   "terminal.external.osxExec": "Ghostty.app",
-  "terminal.integrated.fontFamily": "'Udev gothic 35NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "'MoralerSpace Neon NF', 'Google Sans Code', 'Udev gothic 35NF', Menlo, Monaco, Consolas, 'Courier New', monospace",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.scrollback": 65535,
@@ -77,75 +75,14 @@
     "**/.tool-versions": "properties",
     "**/.shellspec": "properties",
     "*.yml": "yaml",
-    "*.tmpl": "go-template"
+    "*.tmpl": "go-template",
+    ".env*": "dotenv"
   },
   "files.eol": "\n",
   "files.hotExit": "off",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.*_history": true,
-    "**/.bash_sessions": true,
-    "**/.viminfo": true,
-    "**/.lesshst": true,
-    "**/.wget-hsts": true,
-    "**/__pycache__": true,
-    "**/.ipynb_checkpoints": true,
-    "**/.Box*": true,
-    {{ if eq .chezmoi.os "darwin" -}}
-    "**/.CFUserTextEncoding": true,
-    "**/.DS_Store": true,
-    "**/.localized": true,
-    "**/.Trash*": true,
-    "**/Applications": true,
-    "**/Desktop": true,
-    "**/Downloads": true,
-    "**/Library": true,
-    "**/Movies": true,
-    "**/Music": true,
-    "**/Pictures": true,
-    "**/Public": true
-    {{- end -}}
-    {{- if eq .chezmoi.os "windows" -}}
-    "**/desktop.ini": true,
-    "**/3D Objects": true,
-    "**/Application Data": true,
-    "**/Contacts": true,
-    "**/Cookies": true,
-    "**/Default.rdp": true,
-    "**/Desktop": true,
-    "**/Downloads": true,
-    "**/Favorites": true,
-    "**/IntelGraphicsProfiles": true,
-    "**/Links": true,
-    "**/Local Settings": true,
-    "**/Music": true,
-    "**/My Documents": true,
-    "**/My Music": true,
-    "**/My Pictures": true,
-    "**/My Videos": true,
-    "**/NetHood": true,
-    "**/Office のカスタム テンプレート": true,
-    "**/OneDrive": true,
-    "**/OneNote ノートブック": true,
-    "**/Pictures": true,
-    "**/PrintHood": true,
-    "**/Recent": true,
-    "**/Saved Games": true,
-    "**/Searches": true,
-    "**/SendTo": true,
-    "**/Templates": true,
-    "**/Videos": true,
-    "**/スタート メニュー": true,
-    "**/NTUSER*": true,
-    "**/ntuser*": true
-    {{- end }}
-  },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
@@ -160,6 +97,7 @@
   "debug.console.wordWrap": false,
   "debug.inlineValues": "on",
   "diffEditor.wordWrap": "off",
+  "diffEditor.ignoreTrimWhitespace": false,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -169,11 +107,18 @@
   "search.showLineNumbers": true,
   "security.workspace.trust.untrustedFiles": "open",
   "telemetry.telemetryLevel": "off",
+  "containers.containerCommand": "~/.rd/bin/docker",
+  "chat.agent.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "dotenv": false
+  },
   "git.openRepositoryInParentFolders": "never",
   "gitlens.rebaseEditor.ordering": "asc",
   "gitlens.telemetry.enabled": false,
   "redhat.telemetry.enabled": false,
-  "docker.dockerPath": "~/.rd/bin/docker",
+  "docker.extension.enableComposeLanguageServer": false,
+  "json.schemaDownload.enable": true,
   "python.languageServer": "Pylance",
   "python.analysis.autoImportCompletions": true,
   "notebook.markup.fontSize": 12,
@@ -201,6 +146,7 @@
   "prettier.printWidth": 120,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "css.validate": false,
+  "svelte.enable-ts-plugin": true,
   "yaml.schemaStore.enable": false,
   "yaml.customTags": [
     "!And",
@@ -234,37 +180,20 @@
     "MD041": false
   },
   "stylelint.enable": true,
-  "textlint.autoFixOnSave": true,
-  "textlint.configPath": "~/.textlintrc.json",
-  "textlint.run": "onType",
   "backlog.preview.fontSize": 12,
   "backlog.preview.lineHeight": 1.4,
-  "[go][go.mod][makefile]": {
-    "editor.insertSpaces": false,
-    "editor.tabSize": 8
-  },
-  "[go]": {
-    "editor.defaultFormatter": "golang.go",
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "always"
-    }
-  },
-  "[go.mod]": {
-    "editor.defaultFormatter": "golang.go"
-  },
-  "[python]": {
-    "editor.guides.bracketPairs": false,
-    "editor.bracketPairColorization.enabled": false,
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    },
-    "editor.tabSize": 4
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
   },
   "[yaml][github-actions-workflow][dockercompose]": {
     "editor.defaultFormatter": "redhat.vscode-yaml",
     "editor.tabSize": 2
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml",
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true
   },
   "[shellscript][bats]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
@@ -275,10 +204,6 @@
   "[markdown]": {
     "editor.defaultFormatter": "yzhang.markdown-all-in-one",
     "editor.wordWrap": "off",
-    "editor.fontFamily": "'Udev gothic NF', Menlo, Monaco, 'Courier New', monospace",
     "files.trimTrailingWhitespace": false
   },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-  }
 }
