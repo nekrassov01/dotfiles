@@ -1,9 +1,9 @@
+3w36zj6.textlint
 4ops.terraform
 aws-scripting-guy.cform
 be5invis.toml
 bierner.markdown-mermaid
 bierner.markdown-preview-github-styles
-biomejs.biome
 boto3typed.boto3-ide
 charliermarsh.ruff
 christian-kohler.npm-intellisense
@@ -11,6 +11,7 @@ christian-kohler.path-intellisense
 csholmq.excel-to-markdown-table
 davidanson.vscode-markdownlint
 dbaeumer.vscode-eslint
+docker.docker
 eamodio.gitlens
 editorconfig.editorconfig
 esbenp.prettier-vscode
@@ -30,9 +31,12 @@ k--kato.vscode-backlog-wiki-preview
 mechatroner.rainbow-csv
 mikestead.dotenv
 mousavian.ssh-config-syntax-highlighter
+ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker
 ms-ceintl.vscode-language-pack-ja
+ms-playwright.playwright
 ms-python.debugpy
+ms-python.mypy-type-checker
 ms-python.python
 ms-python.vscode-pylance
 ms-toolsai.jupyter
@@ -55,11 +59,14 @@ orta.vscode-jest
 pkief.material-icon-theme
 redhat.vscode-yaml
 shardulm94.trailing-spaces
+snyk-security.snyk-vulnerability-scanner
 sohamkamani.code-eol
 stylelint.vscode-stylelint
-taichi.vscode-textlint
+svelte.svelte-vscode
 techer.open-in-browser
 timonwong.shellcheck
+usernamehw.errorlens
+vector-of-bool.gitflow
 vscodevim.vim
 wayou.vscode-todo-highlight
 wix.vscode-import-cost
