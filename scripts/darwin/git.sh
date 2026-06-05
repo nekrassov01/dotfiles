@@ -4,7 +4,7 @@
 set -eu
 
 # load: helper
-if ! . "$HOME/.bash.init"; then
+if ! . "$HOME/.bash.d/.bash.init"; then
   print_err "Load required settings failed."
   exit 1
 fi
@@ -29,7 +29,7 @@ for i in name email; do
   if
     ! git config --global user."$i" >/dev/null 2>&1
   then
-    printf "$(color byellow)INPUT: $(color reset)user.%s: " $i
+    printf "$(color byellow)INPUT: $(color reset)user.%s: " "$i"
     read -r def
     if [ -z "$def" ]; then
       print_warn "No $i has been set. Set it later"
@@ -42,12 +42,6 @@ unset def i
 
 if has ghq; then
   git config --global ghq.root "~/.repository"
-fi
-
-if has git-secrets; then
-  git secrets --register-aws --global 1>/dev/null
-  git secrets --install ~/.git-templates/secrets --force 1>/dev/null
-  git config --global init.templatedir "~/.git-templates/secrets"
 fi
 
 # closing

@@ -1,28 +1,9 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
 
 set-alias() {
-  # sudo
-  alias sudo='sudo '
-
   # ls
   # Defined in .bash.loader
-
-  # grep
-  alias grep='grep --color=auto'
-  alias fgrep='grep -F --color=auto'
-  alias egrep='grep -E --color=auto'
-
-  # cd
-  alias cd..='cd ..'
-  alias ..='cd ..'
-  alias ...='cd ../..'
-  alias ....='cd ../../..'
-  alias .....='cd ../../../..'
-  alias ~='cd ~'
-  alias -- -='cd - &> /dev/null'
-  alias doc='cd ~/Documents'
-  alias dl='cd ~/Downloads'
-  alias desk='cd ~/Desktop'
 
   # cp,mv,rf
   alias cp='cp -i -v'
@@ -48,7 +29,7 @@ set-alias() {
   alias mpath='echo -e ${MANPATH//:/\\n}'
   alias histignore='echo -e ${HISTIGNORE//:/\\n}'
   alias user='id -a | tr "," "\n"'
-  alias envs='env | sed -e "s/\=/$(color blue)\=$(color reset)/g" | sed -e "s/:/$(color red):$(color reset)/g" | sed -e "s/\//$(color yellow)\/$(color reset)/g" | sort'
+  alias jenv='env | jq -R '\''split("=") | {(.[0]): .[1:] | join("=")}'\'' | jq -s "add | to_entries | sort_by(.key) | from_entries"'
 
   # Get current user fullname for macOS
   alias fullname='dscl . -read /Users/$(whoami) RealName | tail -1 | sed s/^\ //'
@@ -57,16 +38,15 @@ set-alias() {
   alias r='echo $?'
 
   # brew
-  alias brewdeps="brew deps --tree --full-name --installed | grep -v '^\s*$'"
+  alias brewdeps="brew leaves | xargs brew deps --tree --full-name | grep -v '^\s*$'"
 
   # Package manager update
   has brew && alias brewup='brew -v update; brew -v upgrade; brew -v cleanup --prune=all; brew -v doctor'
   has pwsh && alias pwshup='brew -v upgrade powershell --cask; pwsh -c Optimize-UserModule'
   has mise && alias miseup='brew -v upgrade mise; mise upgrade; mise reshim; mise prune; mise cache clear'
-  has mise && mise where rye@latest &>/dev/null && alias ryeup='rye self update'                                                                      # installed by mise
   has mise && mise where node@latest &>/dev/null && alias npmup='npm update -g; npm cache clean --force &>/dev/null; npm cache verify; rm -rf ~/.npm' # installed by mise
   alias swup='sudo softwareupdate --install --all'
-  alias update='has brewup && brewup; has miseup && miseup; has ryeup && ryeup; has npmup && npmup; has pwshup && pwshup'
+  alias update='has brewup && brewup; has miseup && miseup; has npmup && npmup; has pwshup && pwshup'
 
   # Reload shell
   alias reload='clear && exec $SHELL --login'
@@ -78,38 +58,22 @@ set-alias() {
   alias flush='dscacheutil -flushcache && killall -HUP mDNSResponder'
 
   # Get and delete empty files and directories
-  alias emptget='find . -empty -ls'
+  alias getempty='find . -empty -ls'
 
   # directory cleanup
-  alias dsscheck='find . -type f -name "*.DS_Store" -ls'
-  alias dssclean='find . -type f -name "*.DS_Store" -ls -delete'
-  alias attcheck='find . -exec xattr -pr {} +'
-  alias attclean='find . -exec xattr -cr {} +'
-  alias dirclean='dssclean && attclean'
+  alias checkdss='find . -type f -name "*.DS_Store" -ls'
+  alias cleandss='find . -type f -name "*.DS_Store" -ls -delete'
+  alias checkattr='find . -exec xattr -pr {} +'
+  alias cleanattr='find . -exec xattr -cr {} +'
+  alias cleandir='cleandss && cleanattr'
 
   # system cleanup
-  alias trashclean='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash'
-  alias cacheclean='sudo rm -rfv /System/Library/Caches/* /Library/Caches/* ~/Library/Caches/*'
-  alias logclean='sudo rm -rfv /private/var/log/asl/*.asl'
-  alias imgclean='sudo rm -rfv /private/var/vm/sleepimage'
-  alias lsqclean="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
-  alias cleanall='trashclean; cacheclean; logclean; imgclean; lsqclean;'
-
-  # gui shortcuts
-  alias dotshow='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
-  alias dothide='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
-  alias deskshow='defaults write com.apple.finder CreateDesktop -bool true && killall Finder'
-  alias deskhide='defaults write com.apple.finder CreateDesktop -bool false && killall Finder'
-  alias spoton='sudo mdutil -a -i on'
-  alias spotoff='sudo mdutil -a -i off'
-
-  # screensaver, displaysleep, gui session lock, gui logoff
-  alias saver="/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine"
-  alias sleep="pmset displaysleepnow"
-  alias logoff='sudo launchctl bootout gui/$(id -u $(whoami))'
-
-  # Does not work in Big Sur and/or later
-  # alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+  alias cleantrash='sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash'
+  alias cleancache='sudo rm -rfv /System/Library/Caches/* /Library/Caches/* ~/Library/Caches/*'
+  alias cleanlog='sudo rm -rfv /private/var/log/asl/*.asl'
+  alias cleanimage='sudo rm -rfv /private/var/vm/sleepimage'
+  alias cleanlsq="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+  alias cleanall='cleantrash; cleancache; cleanlog; cleanimage; cleanlsq;'
 
   # battery
   alias battery="pmset -g batt | grep -E '([0-9]+%).*' -o --colour=auto | cut -f1 -d';'"
@@ -119,11 +83,6 @@ set-alias() {
 
   # password generator
   alias genpw='base64 /dev/urandom | tr -d -c "[:alnum:]" | fold -w 64 | head -10'
-
-  # Kill all the tabs in Chrome to free up memory
-  if [[ -e '/Applications/Google Chrome.app' ]]; then
-    alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
-  fi
 
   # aws (installed by mise)
   if has mise && mise where awscli@latest &>/dev/null; then
@@ -135,7 +94,6 @@ set-alias() {
   if has code; then
     alias codeext='code --list-extensions'
     alias codehome='code $HOME'
-    alias coderepo='code $MY_REPOSITORY_DIR'
   fi
 
   # docker
@@ -148,11 +106,6 @@ set-alias() {
     alias dockerstart='rdctl start'
     alias dockerdown='rdctl shutdown'
   fi
-
-  # cd working directory
-  [[ -e $MY_REPOSITORY_DIR ]] && alias repo='cd $MY_REPOSITORY_DIR'{{ if eq .chezmoi.hostname "kawashima2" }}
-  [[ -e $MY_BOX_DIR ]] && alias box='cd $MY_BOX_DIR'{{ end }}{{ if eq .chezmoi.hostname "kawashima2" }}
-  [[ -e $MY_PROJECT_DIR ]] && alias pj='cd $MY_PROJECT_DIR'{{ end }}
 }
 
 set-alias

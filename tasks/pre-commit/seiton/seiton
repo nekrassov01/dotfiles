@@ -1,0 +1,17 @@
+#!/bin/sh
+#MISE description="Use seiton to check staged files for github actions workflow"
+# shellcheck disable=SC2154
+
+# Move to the original working directory so that `git diff` works
+cd "$MISE_ORIGINAL_CWD" || exit 1
+
+# Use the bundled config, or override with the path given as the first argument
+config="${1:-$MISE_TASK_DIR/seiton.yaml}"
+
+# Get diff of staged workflow files and exit if empty
+git diff --cached --name-only --diff-filter=ACMR -- '.github/workflows/*.yml' '.github/workflows/*.yaml' |
+grep -q . || exit 0
+
+# Run seiton with the config
+git diff --cached --name-only -z --diff-filter=ACMR -- '.github/workflows/*.yml' '.github/workflows/*.yaml' |
+xargs -0 seiton --config "$config"

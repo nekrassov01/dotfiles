@@ -14,6 +14,8 @@
         "before": true,
         "after": true
       }
-    }
+    },
+    "preset-ja-technical-writing": true,
+    "ja-no-redundant-expression": true
   }
 }

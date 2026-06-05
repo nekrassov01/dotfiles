@@ -1,0 +1,5 @@
+rules:
+  runner-no-latest:
+    enabled: false
+  deny-inherit-secrets:
+    enabled: false

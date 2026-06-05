@@ -8,13 +8,13 @@
 set -eu
 
 # load: helper
-if ! . "$HOME/.bash.init"; then
+if ! . "$HOME/.bash.d/.bash.init"; then
   print_err "Load required settings failed."
   exit 1
 fi
 
-# tools bundling directory
-tool_dir="$HOME/.tools"
+# bundle file path
+bundle_file="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/manifests/Dockfile"
 
 cmd=dockutil
 
@@ -25,7 +25,7 @@ print_header "macOS: Dock configuration"
 ## required: curl and jq
 chk curl jq
 
-if ! has $cmd; then
+if ! has "$cmd"; then
   print_note "Getting package because required tool $cmd not found"
 
   # sudo in upfront
@@ -35,7 +35,7 @@ if ! has $cmd; then
 
   repo_author='kcrawford'
   repo_name=$cmd
-  version=$(get_github_latest_release $repo_author $repo_name)
+  version=$(get_github_latest_release "$repo_author" "$repo_name")
   download_uri="https://github.com/$repo_author/$repo_name/releases/download/$version"
   download_file="$cmd-$version.pkg"
 
@@ -74,7 +74,7 @@ fi
 # required: $cmd
 chk "$cmd"
 
-print_info "Setting up Dock items based on $(color green)$tool_dir/Dockfile$(color reset)"
+print_info "Setting up Dock items based on $(color green)$bundle_file$(color reset)"
 
 # Clean up macOS Dock
 $cmd --no-restart --remove all
@@ -86,7 +86,7 @@ while read -r line; do
     print_err "Adding Dock to $line failed."
     exit 1
   fi
-done <"$tool_dir/Dockfile"
+done <"$bundle_file"
 
 print_info "Killall Dock process"
 

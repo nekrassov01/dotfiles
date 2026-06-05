@@ -1,17 +1,21 @@
 .archive
+.config/age/**
+.config/backlog/**
+.config/keeper/**
+.config/openai/**
+.config/prismaaccess/**
 {{ if eq .chezmoi.os "darwin" }}
 .chezmoiscripts/windows/
+.chezmoiscripts/linux/
 Documents/
 scoop/
 .wslconfig
 {{ end }}
 {{ if eq .chezmoi.os "windows" }}
 .chezmoiscripts/darwin/
-.iterm2.config/
+.chezmoiscripts/linux/
 Library/
 .bash*
 .hushlogin
 .inputrc
-.tool-versions
-.local/bin/syncbundle
 {{ end }}

@@ -13,14 +13,10 @@ $map = @{
   'awspwsh' = 'Show-UserAWSPowerShellReference'
 
   # Utilities
-  '~' = 'Push-UserHomeDirectory'
   'home' = 'Push-UserHomeDirectory'
   'document' = 'Push-UserDocumentDirectory'
   'dl' = 'Push-UserDownloadDirectory'
   'desk' = 'Push-UserDesktopDirectory'
-  'work' = 'Push-UserWorkingDirectory'
-  'project' = 'Push-UserProjectDirectory'
-  'doc' = 'Push-UserDocDirectory'
   'repo' = 'Push-UserRepositoryDirectory'
   'll' = 'Get-UserAutoSizedDirectory'
   'psgip' = 'Get-UserGlobalIpAddress'

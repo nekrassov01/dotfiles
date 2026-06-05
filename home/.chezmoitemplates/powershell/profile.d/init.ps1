@@ -15,11 +15,8 @@ $__Default.Folder = [ordered]@{}
 $__Default.Folder.Documents = [System.IO.Path]::Combine($HOME, 'Documents')
 $__Default.Folder.Downloads = [System.IO.Path]::Combine($HOME, 'Downloads')
 $__Default.Folder.Desktop = [System.IO.Path]::Combine($HOME, 'Desktop')
-$__Default.Folder.Box = [System.IO.Path]::Combine($HOME, 'Documents', 'kawashima')
-$__Default.Folder.Project = [System.IO.Path]::Combine($HOME, 'Documents', 'kawashima', 'project')
 $__Default.Folder.Repository = [System.IO.Path]::Combine($HOME, '.repository')
-$__Default.Folder.ToolsBundle = [System.IO.Path]::Combine($HOME, '.tools')
-$__Default.Folder.ModuleList = [System.IO.Path]::Combine($__Default.Folder.ToolsBundle, 'Pwshfile')
+$__Default.Folder.ModuleList = [System.IO.Path]::Combine($HOME, '.config', 'dotfiles', 'Pwshfile')
 
 if ($IsWindows) {
   $__Default.Folder.Module = "$HOME\Documents\PowerShell\Modules"

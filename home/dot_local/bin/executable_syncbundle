@@ -1,97 +1,91 @@
 #!/bin/sh
 
 # load: helper
-if ! . "$HOME/.bash.init"; then
+if ! . "$HOME/.bash.d/.bash.init"; then
   print_err "Load required settings failed."
   exit 1
 fi
 
-# get module lists by package manager tools: brew, mise, rye, npm, pwsh (homemade), and code
+# required: chezmoi
+chk chezmoi || exit 1
+
+# bundle file locations
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+brewfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Brewfile")"
+uvfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Uvfile")"
+nodefile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Nodefile")"
+dockfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Dockfile")"
+codefile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Codefile")"
+pwshfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Pwshfile")"
+
+# get module lists by package manager tools: brew, uv, node, pwsh (homemade), code, and dock
+# NOTE: mise runtimes are managed declaratively in ~/.config/mise/config.toml.
 get_bundle() {
 
   # brew apps dump
   if has brew; then
-    print_info "Bundling brew"
-    if ! brew bundle dump --formula --tap --cask --force >/dev/null 2>&1; then
+    print_info "Bundling brew -> $(color green)$brewfile$(color reset)"
+    mkdir -p "$(dirname "$brewfile")"
+    if ! brew bundle dump --formula --tap --cask --file "$brewfile" --force >/dev/null 2>&1; then
       print_err "Bundling brew failed."
     fi
   fi
 
-  # mise runtimes dump
-  if has mise; then
-    print_info "Bundling mise"
-    if ! mise list --no-header >"Misefile"; then
-      print_err "Bundling mise failed."
+  # uv tools dump
+  if has mise && uv_bin="$(mise which uv 2>/dev/null)"; then
+    print_info "Bundling uv -> $(color green)$uvfile$(color reset)"
+    mkdir -p "$(dirname "$uvfile")"
+    if ! "$uv_bin" tool list | awk '!/^[[:space:]]*-/ && NF {print $1 "==" substr($2, 2)}' >"$uvfile"; then
+      print_err "Bundling uv failed."
     fi
   fi
 
-  # rye tools dump
-  if has rye; then
-    print_info "Bundling rye"
-    if ! rye tools list -v >"Ryefile"; then
-      print_err "Bundling rye failed."
-    fi
-  fi
-
-  # npm modules dump
+  # node global packages dump
   if has npm; then
-    print_info "Bundling npm"
-    if ! npm -g list --depth=0 | sed -e '1d' -e 's/^.*\ //g' -e '/^$/d' >"Nodefile"; then
+    print_info "Bundling node -> $(color green)$nodefile$(color reset)"
+    mkdir -p "$(dirname "$nodefile")"
+    if ! npm -g list --depth=0 | sed -e '1d' -e 's/^.*\ //g' -e '/^$/d' >"$nodefile"; then
       print_err "Bundling npm failed."
     fi
   fi
 
   # pwsh modules dump
   if has pwsh; then
-    print_info "Bundling pwsh"
-    if ! pwsh -c "Out-UserModule -Force *>\$null"; then
+    print_info "Bundling pwsh -> $(color green)$pwshfile$(color reset)"
+    mkdir -p "$(dirname "$pwshfile")"
+    if ! pwsh -c "Out-UserModule -ModuleList $pwshfile -Force *>\$null"; then
       print_err "Bundling pwsh failed."
     fi
   fi
 
-  # code extensions dump
+  # vscode extensions dump
   if has code; then
-    print_info "Bundling code"
-    if ! code --list-extensions >"Codefile"; then
+    print_info "Bundling code -> $(color green)$codefile$(color reset)"
+    mkdir -p "$(dirname "$codefile")"
+    if ! code --list-extensions >"$codefile"; then
       print_err "Bundling code failed."
     fi
   fi
 
   # dock items dump
   if has dockutil; then
-    print_info "Bundling dock"
-    if ! dockutil --list | cut -f 2 | sed -e 's|file://||g' -e 's|/$||g' -e 's|%20| |g' >"Dockfile"; then
+    print_info "Bundling dock -> $(color green)$dockfile$(color reset)"
+    mkdir -p "$(dirname "$dockfile")"
+    if ! dockutil --list | cut -f 2 | sed -e 's|file://||g' -e 's|/$||g' -e 's|%20| |g' >"$dockfile"; then
       print_err "Bundling dock failed."
     fi
   fi
 }
 
-# sync module lists by package manager tools: brew, mise, rye, npm, pwsh (homemade), and code
-sync_bundle() {
-
-  # check before process
-  tool_dir="$HOME/.tools"
-  if [ -z "$tool_dir" ]; then
-    print_err "Bundle dir not found" && return 1
-  fi
-
-  # backup previous items
-  archive_dir="$tool_dir/.archive/$(date +%Y%m%d%H%M%S)"
-  mkdir -p "$archive_dir"
-  files="$(find "$tool_dir" -type d -name '.archive' -prune -o -type f -print)"
-  for file in $files; do
-    mv "$file" "$archive_dir/" 1>/dev/null
-  done
-  unset file files
-
-  # bundle items
-  cd "$tool_dir" || return 1
-  get_bundle
-
-  # display tree of bundled items
-  cd - >/dev/null 2>&1 || return 1
-  has tree && echo && tree -a "$tool_dir"
-}
-
 # run
-sync_bundle
+echo
+get_bundle
+
+# display result
+echo
+for f in "$brewfile" "$uvfile" "$nodefile" "$pwshfile" "$codefile" "$dockfile"; do
+  [ -f "$f" ] && print_success "Bundled: $f"
+done
+
+echo
+print_note "Wrote to the chezmoi source. Review with 'chezmoi diff', then run 'chezmoi apply'."

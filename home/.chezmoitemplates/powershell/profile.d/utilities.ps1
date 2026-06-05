@@ -28,11 +28,6 @@ function global:Push-UserRepositoryDirectory {
   Push-Location -LiteralPath $__Default.Folder.Repository
 }
 
-# cd ~/Documents/work
-function global:Push-UserWorkingDirectory {
-  Push-Location -LiteralPath $__Default.Folder.Work
-}
-
 # Return auto-sized current directory info
 function global:Get-UserAutoSizedDirectory {
   param (

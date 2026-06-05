@@ -1,14 +1,15 @@
 #!/bin/sh
+
 set -eu
 
 # load: helper
-if ! . "$HOME/.bash.init"; then
+if ! . "$HOME/.bash.d/.bash.init"; then
   print_err "Load required settings failed."
   exit 1
 fi
 
-# tools bundling directory
-tool_dir="$HOME/.tools"
+# bundle file path
+bundle_file="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/manifests/Brewfile"
 
 # opening
 echo
@@ -18,7 +19,7 @@ print_info "Installing homebrew"
 
 # install: homebrew
 if ! has brew; then
-  case "$(uname -m)" in
+  case $(uname -m) in
   x86_64)
     if ! mkdir "$HOME/.homebrew" && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C "$HOME/.homebrew"; then
       print_err "brew install failed for x86_64."
@@ -53,15 +54,15 @@ if ! brew upgrade 1>/dev/null; then
 fi
 
 # check: Brewfile exists
-if [ ! -f "$tool_dir/Brewfile" ]; then
-  print_err "'$tool_dir/Brewfile' does not exists."
+if [ ! -f "$bundle_file" ]; then
+  print_err "'$bundle_file' does not exists."
   exit 1
 fi
 
-print_info "Installing modules based on $(color green)$tool_dir/Brewfile$(color reset)"
+print_info "Installing modules based on $(color green)$bundle_file$(color reset)"
 
 # install: based on Brewfile
-if ! brew bundle --file "$tool_dir/Brewfile" --no-lock --force; then
+if ! brew bundle --file "$bundle_file" --force; then
   print_err "Install modules based on Brewfile failed."
   exit 1
 fi
@@ -70,7 +71,7 @@ fi
 ! brew cleanup 1>/dev/null && print_warn "brew cleanup failed."
 
 # check: Brewfile dependencies
-if ! brew bundle check --file "$tool_dir/Brewfile" 1>/dev/null; then
+if ! brew bundle check --file "$bundle_file" 1>/dev/null; then
   print_err "Brewfile's dependencies are not satisfied."
   exit 1
 fi

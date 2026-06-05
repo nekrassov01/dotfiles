@@ -4,19 +4,21 @@
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# load: xdg base directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
 # load: disable bash warning message
 export BASH_SILENCE_DEPRECATION_WARNING=1
-
-# load: prompt command
-# Some command will be loaded after this basic prompt command setup
-export PROMPT_COMMAND="history -a;history -c;history -r"
 
 # bash: history setting
 export HISTTIMEFORMAT="%F %T "
 export HISTSIZE="32768"
-export HISTFILESIZE="$HISTSIZE"
+export HISTFILESIZE="32768"
 export HISTCONTROL="ignoreboth"
-export HISTIGNORE=exit:bg:fg:clear:pwd:ls:l:ll:history:top:w:env:envs:reload
+export HISTIGNORE=exit:bg:fg:clear:pwd:ls:l:ll:history:top:w:env:jenv:reload
 
 # load: ls color setting, and `ls` aliases
 export CLICOLOR=1
@@ -123,6 +125,11 @@ if has docker; then
   source <(docker completion bash)
 fi
 
+# load: direnv settings
+if has direnv; then
+    source <(direnv hook bash)
+fi
+
 # load: tools installed by mise
 if has mise; then
   source <(mise activate bash)
@@ -133,19 +140,20 @@ if has go; then
   export GO111MODULE=on
 fi
 
-# load: rye settings
-if has rye; then
-  # Manually add to path to maintain order
-  # source "$HOME/.rye/env"
-  PATH=$HOME/.rye/shims:$PATH
-  source <(rye self completion)
+# load: uv settings
+if has uv; then
+  source <(uv generate-shell-completion bash)
   export PYTHONIOENCODING="UTF-8"
 fi
 
 # load: node settings
 if has node; then
-  source <(npm completion)
   export NODE_REPL_HISTORY_SIZE="32768"
+fi
+
+# load: npm settings
+if has npm; then
+  source <(npm completion)
 fi
 
 # load: aws settings
@@ -154,34 +162,9 @@ if has aws; then
   export AWS_PAGER=""
 fi
 
-# load: alpen completion
-if has alpen; then
-  source <(alpen completion bash)
-fi
-
-# load: bkl completion
-if has bkl; then
-  source <(bkl completion bash)
-fi
-
 # load: lem completion
 if has lem; then
   source <(lem completion bash)
-fi
-
-# load: llcm completion
-if has llcm; then
-  source <(llcm completion bash)
-fi
-
-# load: s3bytes completion
-if has s3bytes; then
-  source <(s3bytes --completion bash)
-fi
-
-# load: tlc3 completion
-if has tlc3; then
-  source <(tlc3 --completion bash)
 fi
 
 # optimize: PATH
@@ -223,23 +206,3 @@ MANPATH=$_manpath
 export MANPATH
 unset _mp
 unset _manpath
-
-# load: ghq root
-MY_REPOSITORY_DIR="$HOME/.repository"
-if [[ ! -e "$MY_REPOSITORY_DIR" ]]; then
-  export MY_REPOSITORY_DIR
-fi
-
-{{ if eq .chezmoi.hostname "kawashima2" -}}
-# load: box directory
-MY_BOX_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima"
-if [[ ! -e "$MY_BOX_DIR" ]]; then
-  export MY_BOX_DIR
-fi
-
-# load: project directory
-MY_PROJECT_DIR="$HOME/Library/CloudStorage/Box-Box/kawashima/project"
-if [[ ! -e "$MY_PROJECT_DIR" ]]; then
-  export MY_PROJECT_DIR
-fi
-{{- end }}

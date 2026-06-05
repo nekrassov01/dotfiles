@@ -3,7 +3,7 @@
 set -eu
 
 # load: helper
-if ! . "$HOME/.bash.init"; then
+if ! . "$HOME/.bash.d/.bash.init"; then
   print_err "Load required settings failed."
   exit 1
 fi

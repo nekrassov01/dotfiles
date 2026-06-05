@@ -3,7 +3,7 @@
 # ------
 
 # Environment settings
-.env
+.env*
 
 # direnv
 .envrc
@@ -20,19 +20,8 @@ RegisteredAccounts.json
 # git
 .git
 
-# box
-.Box*
-**/Box-Box
-
-# history
-.*_history
-.bash_sessions
-.lesshst
-.wget-hsts
-
-# CI/CD
-release/**/*
-!release/.gitkeep
+# Claude
+**/.claude/settings.local.json
 
 {{ if eq .chezmoi.os "darwin" -}}
 

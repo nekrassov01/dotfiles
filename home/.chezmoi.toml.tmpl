@@ -1,0 +1,13 @@
+{{- $githubUsername := promptStringOnce . "github_username" "nekrassov01" -}}
+{{- $githubEmail := promptStringOnce . "github_email" "unclek62@gmail.com" -}}
+
+encryption = "age"
+
+[age]
+identity = "~/.config/age/key.txt"
+recipient = "age1xtpjfgu83g7lkxe33cz72424wpg5a53gn9e4mtxfess7hrcrx3sqld02h5"
+
+[data]
+work = {{ hasPrefix "kawashima" .chezmoi.hostname }}
+github_username = {{ $githubUsername | quote }}
+github_email = {{ $githubEmail | quote }}

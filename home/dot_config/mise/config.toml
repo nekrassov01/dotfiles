@@ -1,0 +1,17 @@
+[settings]
+minimum_release_age = "7d"
+
+[tools]
+awscli = "latest"
+go = "latest"
+node = "24"
+uv = "latest"
+
+[task_config]
+includes = [
+  "git::https://github.com/nekrassov01/dotfiles.git//tasks/pre-commit/markdownlint?ref=main",
+  "git::https://github.com/nekrassov01/dotfiles.git//tasks/pre-commit/secretlint?ref=main",
+  "git::https://github.com/nekrassov01/dotfiles.git//tasks/pre-commit/seiton?ref=main",
+  "git::https://github.com/nekrassov01/dotfiles.git//tasks/pre-commit/shellcheck?ref=main",
+  "git::https://github.com/nekrassov01/dotfiles.git//tasks/pre-commit/textlint?ref=main",
+]

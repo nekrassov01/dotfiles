@@ -1,0 +1,2 @@
+# Disable vite-plus shell integration in zsh
+.zshenv

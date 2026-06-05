@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "preset-ja-technical-writing": {
+      "sentence-length": false,
+      "no-doubled-joshi": false
+    }
+  }
+}

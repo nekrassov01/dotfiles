@@ -1,0 +1,33 @@
+{
+  "enabledPlugins": {
+    "github@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "aws-core@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "superpowers@superpowers-marketplace": true,
+    "superpowers-developing-for-claude-code@superpowers-marketplace": true,
+    "episodic-memory@superpowers-marketplace": true,
+    "aws-cdk-pack@cdk-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      },
+      "autoUpdate": true
+    },
+    "cdk-skills": {
+      "source": {
+        "source": "github",
+        "repo": "go-to-k/cdk-skills"
+      },
+      "autoUpdate": true
+    }
+  },
+  "language": "日本語"
+}

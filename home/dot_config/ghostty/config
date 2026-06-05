@@ -1,6 +1,6 @@
 shell-integration = bash
 
-theme = Andromeda
+theme = "GitHub Dark Dimmed"
 
 font-feature = -calt
 font-feature = -dlig
@@ -29,4 +29,6 @@ window-inherit-working-directory = true
 
 resize-overlay = never
 
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
 keybind = global:alt+ctrl+t=toggle_quick_terminal

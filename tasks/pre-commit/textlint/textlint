@@ -1,0 +1,17 @@
+#!/bin/sh
+#MISE description="Use textlint to check staged markdown files"
+# shellcheck disable=SC2154
+
+# Move to the original working directory so that `git diff` works
+cd "$MISE_ORIGINAL_CWD" || exit 1
+
+# Use the bundled config, or override with the path given as the first argument
+config="${1:-$MISE_TASK_DIR/.textlintrc.json}"
+
+# Get diff of staged markdown files and exit if empty
+git diff --cached --name-only --diff-filter=ACMR -- '*.md' |
+grep -q . || exit 0
+
+# Run textlint with the config
+git diff --cached --name-only -z --diff-filter=ACMR -- '*.md' |
+xargs -0 textlint --config "$config"

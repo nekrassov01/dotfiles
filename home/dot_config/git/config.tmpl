@@ -1,0 +1,40 @@
+[alias]
+	s = status -s -b
+	a = add .
+	l = log --color --abbrev-commit --oneline
+	g = log --color --abbrev-commit --graph
+[core]
+	editor = code --wait
+	whitespace = space-before-tab,trailing-space
+	trustctime = false
+	precomposeunicode = true
+	quotepath = false
+	pager = LESSCHARSET=utf-8 less
+[init]
+	defaultbranch = main
+[apply]
+	whitespace = fix
+[color]
+	ui = auto
+[fetch]
+	prune = true
+[pull]
+	rebase = true
+[merge]
+	log = true
+[diff]
+	renames = copies
+[help]
+	autocorrect = 1
+[user]
+	name = {{ .github_username }}
+	email = {{ .github_email }}
+[includeIf "gitdir:{{ .chezmoi.homeDir }}/.repository/github.com/{{ .github_username }}/"]
+	path = {{ .chezmoi.homeDir }}/.config/git/config.{{ .github_username }}
+[includeIf "gitdir:{{ .chezmoi.homeDir }}/.repository/github.com/organization/"]
+	path = {{ .chezmoi.homeDir }}/.config/git/config.organization
+[ghq]
+	root = {{ .chezmoi.homeDir }}/.repository
+[hook "secretlint"]
+	event = pre-commit
+	command = mise run secretlint
