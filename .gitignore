@@ -1,4 +1,4 @@
 .aws/credentials
 Brewfile.lock.json
-*archive
-unused
+.[Tt]mp
+.[Tt]emp
