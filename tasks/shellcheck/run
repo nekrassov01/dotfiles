@@ -1,0 +1,18 @@
+#!/bin/sh
+#MISE description="Run shellcheck on the given paths"
+# shellcheck disable=SC2154
+
+# mise sets MISE_TASK_DIR; fall back to the script's own dir for direct execution
+task_dir="${MISE_TASK_DIR:-$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)}"
+
+# Run from the original working directory, not the mise config root
+cd "${MISE_ORIGINAL_CWD:-$PWD}" || exit 1
+
+# Use the bundled config unless the caller passes its own --rcfile
+case " $* " in
+  *" --rcfile "* | *" --rcfile="*) : ;;
+  *) set -- --rcfile="$task_dir/shellcheckrc" "$@" ;;
+esac
+
+# No path given is left to shellcheck's native behavior
+shellcheck "$@"

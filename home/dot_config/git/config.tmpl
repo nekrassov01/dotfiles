@@ -37,4 +37,4 @@
 	root = {{ .chezmoi.homeDir }}/.repository
 [hook "secretlint"]
 	event = pre-commit
-	command = mise run secretlint
+	command = mise run secretlint:pre-commit

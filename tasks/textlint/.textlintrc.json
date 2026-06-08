@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "preset-ja-spacing": {
+      "ja-no-space-around-parentheses": false,
+      "ja-space-between-half-and-full-width": {
+        "space": ["alphabets", "numbers"]
+      }
+    },
+    "preset-ja-technical-writing": {
+      "sentence-length": {
+        "max": 150
+      },
+      "no-doubled-joshi": false,
+      "ja-no-weak-phrase": false,
+      "max-kanji-continuous-len": false
+    },
+    "ja-no-redundant-expression": true
+  }
+}

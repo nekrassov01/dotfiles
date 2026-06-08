@@ -1,0 +1,13 @@
+#!/bin/sh
+#MISE description="Run secretlint on staged files"
+# shellcheck disable=SC2154
+
+# Run from the original working directory so that `git diff` works
+cd "$MISE_ORIGINAL_CWD" || exit 1
+
+# Skip when nothing is staged
+git diff --cached --name-only --diff-filter=ACMR | grep -q . || exit 0
+
+# Hand the staged files to the core task; xargs -0 keeps NUL-safety
+git diff --cached --name-only -z --diff-filter=ACMR |
+xargs -0 "$MISE_TASK_DIR/run" "$@"
