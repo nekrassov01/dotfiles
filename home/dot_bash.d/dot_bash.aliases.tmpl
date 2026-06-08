@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154
 
-set-alias() {
+setalias() {
   # ls
   # Defined in .bash.loader
 
@@ -54,7 +54,6 @@ set-alias() {
 
   # networking
   alias gip='curl checkip.amazonaws.com'
-  alias gipc='echo "$(curl -s checkip.amazonaws.com)/32"'
   alias flush='dscacheutil -flushcache && killall -HUP mDNSResponder'
 
   # Get and delete empty files and directories
@@ -74,6 +73,10 @@ set-alias() {
   alias cleanimage='sudo rm -rfv /private/var/vm/sleepimage'
   alias cleanlsq="sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
   alias cleanall='cleantrash; cleancache; cleanlog; cleanimage; cleanlsq;'
+
+  # gui shortcuts
+  alias dotshow='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
+  alias dothide='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
 
   # battery
   alias battery="pmset -g batt | grep -E '([0-9]+%).*' -o --colour=auto | cut -f1 -d';'"
@@ -108,4 +111,4 @@ set-alias() {
   fi
 }
 
-set-alias
+setalias
