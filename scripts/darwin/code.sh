@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2034
 # -------------------------------------------------------------------
 #  NOTE:
 #  This script parses settings.json with jq.
@@ -68,7 +69,8 @@ ssl_check=$(cat "$ssl_check_file")
 # Get indent size (default 2 if unset, null, or non-numeric)
 tab_size=$(echo "$setting_file_content" | jq -r '."editor.tabSize" // 2' 2>/dev/null)
 case "$tab_size" in
-'' | *[!0-9]*) tab_size=2 ;;
+  '' | *[!0-9]*) tab_size=2 ;;
+  *) ;;
 esac
 
 # Backup original vscode settings
