@@ -1,17 +1,35 @@
 {
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.envrc)",
+      "Read(**/*tmp)",
+      "Read(**/*temp)",
+      "Read(**/node_modules/*)",
+      "Read(**/.aws/credentials)",
+      "Read(**/*.crt)",
+      "Read(**/*key)",
+      "Read(**/*GITHUB_TOKEN*)",
+      "Read(**/recovery-phrase)"
+    ]
+  },
   "enabledPlugins": {
-    "github@claude-plugins-official": true,
+    "aws-core@claude-plugins-official": true,
+    "aws-serverless@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
-    "aws-core@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "episodic-memory@superpowers-marketplace": true,
     "superpowers@superpowers-marketplace": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "episodic-memory@superpowers-marketplace": true,
-    "aws-cdk-pack@cdk-skills": true
+    "aws-cdk-pack@cdk-skills": true,
+    "aws-cdk-unit-testing@cdk-skills": true
   },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
