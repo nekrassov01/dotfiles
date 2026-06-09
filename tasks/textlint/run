@@ -14,5 +14,11 @@ case " $* " in
   *) set -- --config "$task_dir/.textlintrc.json" "$@" ;;
 esac
 
+# Use the bundled ignore list unless the caller passes its own --ignore-path
+case " $* " in
+  *" --ignore-path "* | *" --ignore-path="*) : ;;
+  *) set -- --ignore-path "$task_dir/.textlintignore" "$@" ;;
+esac
+
 # No path given is left to textlint's native behavior
 textlint "$@"
