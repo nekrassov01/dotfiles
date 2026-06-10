@@ -1,0 +1,110 @@
+{{define "function"}}
+{{- $f := .}}
+
+func {{.TestName}}(t *testing.T) {
+	{{- with .Receiver}}
+		{{- if .IsStruct}}
+			{{- if .Fields}}
+				type fields struct {
+				{{- range .Fields}}
+					{{Field .}} {{.Type}}
+				{{- end}}
+				}
+			{{- end}}
+		{{- end}}
+	{{- end}}
+	{{- if .TestParameters}}
+	type args struct {
+		{{- range .TestParameters}}
+				{{Param .}} {{.Type}}
+		{{- end}}
+	}
+	{{- end}}
+	type want struct {
+		{{- range .TestResults}}
+			val{{if gt (len $f.TestResults) 1}}{{.Index}}{{end}} {{.Type}}
+		{{- end}}
+		{{- if .ReturnsError}}
+			isErr bool
+		{{- end}}
+	}
+	type hook struct {
+		before func()
+		after  func()
+	}
+	tests := []struct {
+		name   string
+		{{- with .Receiver}}
+			{{- if and .IsStruct .Fields}}
+				fields fields
+			{{- else}}
+				{{Receiver .}} {{.Type}}
+			{{- end}}
+		{{- end}}
+		{{- if .TestParameters}}
+			args args
+		{{- end}}
+		want want
+		hook hook
+	}{
+		// TODO: Add test cases.
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if test.hook.before != nil {
+				test.hook.before()
+			}
+			defer func() {
+				if test.hook.after != nil {
+					test.hook.after()
+				}
+			}()
+			{{- with .Receiver}}
+				{{- if .IsStruct}}
+					{{Receiver .}} := {{if .Type.IsStar}}&{{end}}{{.Type.Value}}{
+					{{- range .Fields}}
+						{{.Name}}: test.fields.{{Field .}},
+					{{- end}}
+					}
+				{{- end}}
+			{{- end}}
+			{{- range .Parameters}}
+				{{- if .IsWriter}}
+					{{Param .}} := &bytes.Buffer{}
+				{{- end}}
+			{{- end}}
+			{{- if .OnlyReturnsError}}
+				err := {{template "call" $f}}
+				isErr := (err != nil)
+				if isErr != test.want.isErr {
+					t.Errorf("error mismatch\ngot=%v\nwant=%v\n", isErr, test.want.isErr)
+				}
+			{{- else}}
+				{{template "results" $f}} {{template "call" $f}}
+				{{- if .ReturnsError}}
+					isErr := err != nil
+					if isErr != test.want.isErr {
+						t.Errorf("error mismatch\ngot=%v\nwant=%v\n", isErr, test.want.isErr)
+						{{- if .TestResults}}
+							return
+						{{- end}}
+					}
+				{{- end}}
+				{{- range .TestResults}}
+					{{- $sfx := ""}}{{if gt (len $f.TestResults) 1}}{{$sfx = printf "%d" .Index}}{{end}}
+					{{- if .IsWriter}}
+						if got{{$sfx}} := {{Param .}}.String(); got{{$sfx}} != test.want.val{{$sfx}} {
+					{{- else if .IsBasicType}}
+						if got{{$sfx}} != test.want.val{{$sfx}} {
+					{{- else}}
+						if !reflect.DeepEqual(got{{$sfx}}, test.want.val{{$sfx}}) {
+					{{- end}}
+						t.Errorf("value mismatch\ngot=%v\nwant=%v\n", got{{$sfx}}, test.want.val{{$sfx}})
+					}
+				{{- end}}
+			{{- end}}
+		})
+	}
+}
+
+{{end}}
