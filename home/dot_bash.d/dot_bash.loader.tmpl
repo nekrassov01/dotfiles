@@ -135,6 +135,11 @@ if has mise; then
   source <(mise activate bash)
 fi
 
+# load: cmux shell integration
+if [[ "${CMUX_SHELL_INTEGRATION:-0}" != "0" && -r "${CMUX_SHELL_INTEGRATION_DIR:-}/cmux-bash-integration.bash" ]]; then
+  source "$CMUX_SHELL_INTEGRATION_DIR/cmux-bash-integration.bash"
+fi
+
 # load: go settings
 if has go; then
   export GO111MODULE=on
