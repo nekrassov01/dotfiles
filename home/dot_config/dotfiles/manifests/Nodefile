@@ -3,7 +3,6 @@ corepack@0.35.0
 markdownlint-cli2@0.22.1
 npm@11.16.0
 secretlint@13.0.2
-slopless@0.2.14
 textlint-rule-ja-no-redundant-expression@4.0.1
 textlint-rule-preset-ja-spacing@2.4.3
 textlint-rule-preset-ja-technical-writing@12.0.2
