@@ -1,0 +1,16 @@
+#!/bin/sh
+#MISE description="Run trivy config on staged IaC files"
+# shellcheck disable=SC2154
+
+# Run from the original working directory so that `git diff` works
+cd "$MISE_ORIGINAL_CWD" || exit 1
+
+# IaC targets: all YAML (CloudFormation, etc.) and Dockerfiles; trivy detects the type per file.
+# JSON CFn and CDK-synthesized templates (gitignored cdk.out/) are out of scope; scan via `trivy:run`.
+
+# Skip when no IaC files are staged
+git diff --cached --name-only --diff-filter=ACMR -- '*.yaml' '*.yml' '*Dockerfile*' '*Containerfile*' | grep -q . || exit 0
+
+# Hand each staged file to the core task; trivy config takes one target at a time, so -n1
+git diff --cached --name-only -z --diff-filter=ACMR -- '*.yaml' '*.yml' '*Dockerfile*' '*Containerfile*' |
+xargs -0 -n1 "$MISE_TASK_DIR/run" "$@"
