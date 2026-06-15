@@ -4,90 +4,94 @@
 # Functions for fzf
 #
 
-if has fzf; then
 
-    # fzf search for ghq root
-    fzghq() {
-        chk fzf ghq
+# fzf search for ghq root; Enter to cd, Ctrl-o to cd and open with the editor
+fzghq() {
+    chk fzf ghq
 
-        local root
-        root=$(ghq root)
+    local root
+    root=$(ghq root)
 
-        local cmd
-        if command -v leaf >/dev/null 2>&1; then
-            cmd="leaf --inline ansi:\"\$FZF_PREVIEW_COLUMNS\" \"\$readme\""
-        else
-            cmd="cat \"\$readme\""
-        fi
+    local cmd
+    if command -v leaf >/dev/null 2>&1; then
+        cmd="leaf --inline ansi:\"\$FZF_PREVIEW_COLUMNS\" \"\$readme\""
+    else
+        cmd="cat \"\$readme\""
+    fi
 
-        local target
-        target=$(ghq list | fzf \
-            --preview-window=60%:wrap \
-            --preview "readme='$root/{}/README.md'; [ -f \"\$readme\" ] && $cmd")
+    local out
+    out=$(ghq list | fzf \
+        --expect=ctrl-o \
+        --preview-window=60%:wrap \
+        --preview "readme='$root/{}/README.md'; [ -f \"\$readme\" ] && $cmd")
+    [[ -n "$out" ]] || return
 
-        if [[ -n "$target" ]]; then
-            if has code; then
-                code "$root/$target" || return 1
-            else
-                cd "$root/$target" || return 1
-            fi
-        fi
-    }
+    local key target
+    key=$(sed -n 1p <<<"$out")
+    target=$(sed -n 2p <<<"$out")
+    [[ -n "$target" ]] || return
 
-    # bind Ctrl+g to fzghq
-    bind -x '"\C-g": fzghq'
+    local dir="$root/$target"
+    cd "$dir" || return
+    if [[ "$key" == "ctrl-o" ]] && has code; then
+        code "$dir"
+    fi
+    clear
+}
 
-    # fzf search for aws cli reference
-    fzawscli() {
-        # required: fzf aws
-        chk fzf aws
+# Ctrl-g: run fzghq as a normal command so the prompt redraws at the new cwd
+bind '"\C-g": "\C-e\C-u fzghq\n"'
 
-        local target url url_prefix="https://docs.aws.amazon.com/cli/latest/reference"
+# fzf search for aws cli reference
+fzawscli() {
+    # required: fzf aws
+    chk fzf aws
 
-        if [[ -z "$1" ]]; then
-            target=$(
-                aws help |
-                    col -b |
-                    sed -n '/AVAILABLE SERVICES/,/SEE ALSO/p' |
-                    grep 'o ' |
-                    sed s/'o '//g |
-                    tr -d ' ' |
-                    sed -e /help/d |
-                    sort |
-                    fzf --preview-window=80% --preview "echo $url_prefix/{}/index.html"
-            )
-            url="$url_prefix/${target}/index.html"
-        else
-            target=$(aws "$1" help |
+    local target url url_prefix="https://docs.aws.amazon.com/cli/latest/reference"
+
+    if [[ -z "$1" ]]; then
+        target=$(
+            aws help |
                 col -b |
-                sed -n '/AVAILABLE COMMANDS/,/()/p' |
+                sed -n '/AVAILABLE SERVICES/,/SEE ALSO/p' |
                 grep 'o ' |
-                sed 's/o\ //g' |
+                sed s/'o '//g |
                 tr -d ' ' |
                 sed -e /help/d |
                 sort |
-                fzf --preview-window=60% --preview "echo $url_prefix/${1}/{}.html")
-            url="$url_prefix/${1}/${target}.html"
-        fi
+                fzf --preview-window=80% --preview "echo $url_prefix/{}/index.html"
+        )
+        url="$url_prefix/${target}/index.html"
+    else
+        target=$(aws "$1" help |
+            col -b |
+            sed -n '/AVAILABLE COMMANDS/,/()/p' |
+            grep 'o ' |
+            sed 's/o\ //g' |
+            tr -d ' ' |
+            sed -e /help/d |
+            sort |
+            fzf --preview-window=60% --preview "echo $url_prefix/${1}/{}.html")
+        url="$url_prefix/${1}/${target}.html"
+    fi
 
-        if [[ -n $target ]]; then
-            open "$url"
-        fi
-    }
+    if [[ -n $target ]]; then
+        open "$url"
+    fi
+}
 
-    # fzf search for aws powershell reference
-    fzawspwsh() {
-        # required: fzf pwsh
-        chk fzf pwsh
+# fzf search for aws powershell reference
+fzawspwsh() {
+    # required: fzf pwsh
+    chk fzf pwsh
 
-        local target url_prefix="https://docs.aws.amazon.com/powershell/latest/reference/items"
-        target=$(pwsh -c "(Get-AWSCmdletName).CmdletName" | fzf --preview "echo $url_prefix/{}.html")
+    local target url_prefix="https://docs.aws.amazon.com/powershell/latest/reference/items"
+    target=$(pwsh -c "(Get-AWSCmdletName).CmdletName" | fzf --preview "echo $url_prefix/{}.html")
 
-        if [[ -n $target ]]; then
-            open "$url_prefix/${target}.html"
-        fi
-    }
-fi
+    if [[ -n $target ]]; then
+        open "$url_prefix/${target}.html"
+    fi
+}
 
 #
 # Functions for utility
