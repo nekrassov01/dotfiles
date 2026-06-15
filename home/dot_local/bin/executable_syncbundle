@@ -26,7 +26,7 @@ get_bundle() {
   if has brew; then
     print_info "Bundling brew -> $(color green)$brewfile$(color reset)"
     mkdir -p "$(dirname "$brewfile")"
-    if ! brew bundle dump --formula --tap --cask --file "$brewfile" --force >/dev/null 2>&1; then
+    if ! brew bundle dump --formula --tap --cask --no-describe --file "$brewfile" --force >/dev/null 2>&1; then
       print_err "Bundling brew failed."
     fi
   fi

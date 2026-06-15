@@ -46,6 +46,17 @@ if ! brew update 1>/dev/null; then
   print_warn "brew update failed."
 fi
 
+print_info "Trusting third-party taps declared in Brewfile"
+
+# trust: register Brewfile taps in trust.json so every brew path can load them (Homebrew 6.0+)
+if [ -f "$bundle_file" ]; then
+  grep -E '^tap ' "$bundle_file" | sed -E 's/^tap "([^"]+)".*/\1/' | while IFS= read -r tap; do
+    if ! brew trust --tap "$tap" 1>/dev/null; then
+      print_warn "Trust tap '$tap' failed."
+    fi
+  done
+fi
+
 print_info "Upgrading homebrew"
 
 # run: upgrade

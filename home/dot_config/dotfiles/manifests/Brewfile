@@ -1,8 +1,8 @@
-tap "babarot/tap"
-tap "guitarrapc/seiton", "https://github.com/guitarrapc/seiton"
-tap "k1low/tap"
-tap "microsoft/apm"
-tap "nekrassov01/tap"
+tap "babarot/tap", trusted: true
+tap "guitarrapc/seiton", "https://github.com/guitarrapc/seiton", trusted: true
+tap "k1low/tap", trusted: true
+tap "microsoft/apm", trusted: true
+tap "nekrassov01/tap", trusted: true
 brew "age"
 brew "bash"
 brew "bash-completion@2"
