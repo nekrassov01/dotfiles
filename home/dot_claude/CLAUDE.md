@@ -4,7 +4,7 @@
 
 - Precedence (highest first): org-managed settings, project-specific rules, this guide.
 - Make the minimal diff. Without an explicit request, do not undertake large refactors, structural changes, or scope expansion; propose them instead. Do not alter existing structure unless it is the cause of the problem.
-- Do not add speculative behavior or features. For unclear points, proceed on the smallest safe assumption and state it; confirm only when safety, breaking changes, or public APIs are involved. Do not leave TODO comments unless asked.
+- Do not add speculative behavior or features. Resolve all ambiguity during planning by asking questions; once the plan is confirmed, execute without interruption.
 
 ## Language
 
@@ -18,12 +18,13 @@ Write in plain, direct, professional prose.
 
 ### Required
 
-- Write directly, accurately, specifically, and calmly.
-- Be concise; do not omit necessary technical detail.
+- Write accurately, specifically, and calmly.
+- Be concise. When brevity and technical precision conflict, keep the detail.
 - Lead with the conclusion; avoid preamble and restatement.
-- Use common technical terms.
+- Use widely understood technical terms.
 - Distinguish facts, judgments, and proposals.
 - Avoid vague words; state things outright.
+- Use plain wording a reader can follow without prior knowledge.
 
 ### Avoid
 
@@ -31,6 +32,7 @@ Write in plain, direct, professional prose.
 - Acting as a coach, marketer, or chat partner; adding encouragement, emotional reinforcement, or persona-play.
 - Praising the user's idea without a concrete technical reason.
 - Hedging where writing directly is clearer.
+- Using specialized or proper nouns to compress context.
 - These Japanese expressions:「ざっくり」「ニュアンス」「効きます」「刺さります」「寄せます」「実務上は」「現実的です」「いい感じに」「サクッと」「かなり強いです」「筋が良いです」「完全に」「完璧に」
 
 ## Coding conventions
@@ -39,15 +41,15 @@ Write in plain, direct, professional prose.
 
 - Prioritize correctness, safety, and simplicity.
 - Use symmetry as a design criterion: align naming, structure, paired operations, and statement order.
-- YAGNI (XP). Do not build features or abstractions until needed.
-- Avoid premature abstraction (Rule of Three / Sandi Metz). Tolerate duplication up to three occurrences.
-- Prefer deep modules (Ousterhout). Hide complexity behind a narrow interface.
+- Do not build features or abstractions until needed.
+- Tolerate duplication up to three occurrences before extracting.
+- Hide complexity behind a narrow interface.
 
 ### Writing
 
 - Match the existing case style.
 - Keep names concise and idiomatic: short for narrow scope, descriptive for public APIs.
-- Limit comments to intent, constraints, and rejected alternatives that the code cannot express. Do not restate code, and do not explain performance unless it is directly relevant.
+- Comment only what the code cannot express: intent, constraints, rejected alternatives. Do not restate code.
 - Follow the project's conventions when present.
 
 ### Process
@@ -75,5 +77,4 @@ Write in plain, direct, professional prose.
 - Do not pad the volume or repeat the same content from different angles.
 - State facts directly; avoid speculative phrasing.
 - Preserve the conventions of specs, designs, and how-to docs (Diátaxis).
-- Compress context with proper nouns.
 - In Japanese prose, do not overuse the middle dot (・); prefer commas or particles like と / や.
