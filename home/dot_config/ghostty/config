@@ -1,7 +1,8 @@
 shell-integration = bash
 
-theme = "GitHub Dark Dimmed"
+theme = "GitHub Dark Default"
 
+font-size = 16
 font-feature = -calt
 font-feature = -dlig
 
