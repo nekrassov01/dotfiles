@@ -15,4 +15,4 @@ case " $* " in
 esac
 
 # Paths are literal (--no-glob); no path given is left to secretlint's native behavior
-secretlint --no-glob "$@"
+mise exec -- secretlint --no-glob "$@"

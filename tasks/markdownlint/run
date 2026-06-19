@@ -15,4 +15,4 @@ case " $* " in
 esac
 
 # No path given is left to markdownlint-cli2's native behavior (its config globs)
-markdownlint-cli2 "$@"
+mise exec -- markdownlint-cli2 "$@"

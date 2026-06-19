@@ -21,4 +21,4 @@ case " $* " in
 esac
 
 # No path given is left to textlint's native behavior
-textlint "$@"
+mise exec -- textlint "$@"
