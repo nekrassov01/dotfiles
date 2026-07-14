@@ -47,41 +47,52 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '~/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
   "enabledPlugins": {
+    "aws-cdk-pack@cdk-skills": true,
+    "aws-cdk-unit-testing@cdk-skills": true,
     "aws-core@claude-plugins-official": true,
     "aws-serverless@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
+    "episodic-memory@superpowers-marketplace": true,
     "frontend-design@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "episodic-memory@superpowers-marketplace": true,
-    "superpowers@superpowers-marketplace": true,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "aws-cdk-pack@cdk-skills": true,
-    "aws-cdk-unit-testing@cdk-skills": true
+    "superpowers@superpowers-marketplace": true,
+    "typescript-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
-    "superpowers-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers-marketplace"
-      },
-      "autoUpdate": true
-    },
     "cdk-skills": {
       "source": {
         "source": "github",
         "repo": "go-to-k/cdk-skills"
       },
       "autoUpdate": true
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      },
+      "autoUpdate": true
     }
   },
+  "advisorModel": "fable",
   "language": "日本語"
 }
