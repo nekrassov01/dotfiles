@@ -1,6 +1,6 @@
 tap "babarot/tap", trusted: true
 tap "guitarrapc/seiton", "https://github.com/guitarrapc/seiton", trusted: true
-tap "k1low/tap", trusted: true
+tap "k1low/tap", "https://github.com/k1LoW/homebrew-tap", trusted: true
 tap "microsoft/apm", trusted: true
 tap "nekrassov01/tap", trusted: true
 brew "age"
@@ -9,6 +9,7 @@ brew "bash-completion@2"
 brew "bat"
 brew "coreutils"
 brew "bats-core"
+brew "circleci"
 brew "direnv"
 brew "ffmpeg"
 brew "findutils"
@@ -23,6 +24,7 @@ brew "gnu-tar"
 brew "goreleaser"
 brew "grep"
 brew "gzip"
+brew "herdr"
 brew "jq"
 brew "leaf-md"
 brew "mas"
@@ -42,7 +44,7 @@ brew "k1low/tap/git-wt"
 brew "microsoft/apm/apm"
 brew "nekrassov01/tap/ignoresync"
 brew "nekrassov01/tap/lem"
-cask "cmux"
+brew "nekrassov01/tap/llcm"
 cask "displaylink"
 cask "font-moralerspace-hw"
 cask "font-sf-mono-nerd-font-ligaturized"
