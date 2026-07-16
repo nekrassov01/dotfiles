@@ -39,11 +39,16 @@ Write in plain, direct, professional prose.
 
 ### Design
 
-- Prioritize correctness, safety, and simplicity.
+- Prioritize correctness and safety.
 - Use symmetry as a design criterion: align naming, structure, paired operations, and statement order.
 - Do not build features or abstractions until needed.
 - Tolerate duplication up to three occurrences before extracting.
 - Hide complexity behind a narrow interface.
+- Classify code as actions, calculations, and data (Grokking Simplicity):
+  - Data: inert values. Prefer data over calculations where possible.
+  - Calculations: pure functions. Same input always produces the same output. Prefer calculations over actions.
+  - Actions: depend on when or how many times they run. Minimize and push to the edges.
+  - Extract calculations from actions. An action calling a calculation stays an action, but the extracted logic becomes testable and reusable.
 
 ### Writing
 
