@@ -28,13 +28,15 @@ case "$command" in
     deny "Blocked: git hard reset" ;;
   *"git clean -f"*)
     deny "Blocked: git cleanup" ;;
+  *"git stash drop"* | *"git stash clear"*)
+    deny "Blocked: git stash drop/clear" ;;
   *"DROP TABLE"* | *"DROP DATABASE"* | *"TRUNCATE "*)
     deny "Blocked: destructive SQL" ;;
   *"cdk deploy"* | *"cdk destroy"*)
     deny "Blocked: cdk" ;;
-  *"terraform destroy"* | *"terraform apply"*)
+  *"terraform apply"* | *"terraform destroy"*)
     deny "Blocked: terraform" ;;
-  *"kubectl delete"* | *"kubectl apply"*)
+  *"kubectl apply"* | *"kubectl delete"*)
     deny "Blocked: kubectl" ;;
   *) ;;
 esac
