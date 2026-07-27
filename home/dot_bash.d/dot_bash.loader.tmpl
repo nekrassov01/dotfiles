@@ -113,17 +113,15 @@ if has chezmoi; then
   eval "$(chezmoi completion bash)"
 fi
 
-## load: rancher settings
-#if [[ -d "$HOME/.rd" ]]; then
-#  export PATH="$HOME/.rd/bin:$PATH"
-#  export DOCKER_HOST="unix://$HOME/.rd/docker.sock"
-#  eval "$("$HOME"/.rd/bin/rdctl completion bash)"
-#fi
-#
-## load: docker settings
-#if has docker; then
-#  eval "$(docker completion bash)"
-#fi
+# load: docker settings
+if has docker; then
+  eval "$(docker completion bash)"
+fi
+
+# load: colima settings
+if has colima; then
+  eval "$(colima completion bash)"
+fi
 
 # load: direnv settings
 if has direnv; then
