@@ -15,8 +15,8 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # bash: history setting
 export HISTTIMEFORMAT="%F %T "
-export HISTSIZE="32768"
-export HISTFILESIZE="32768"
+export HISTSIZE="2048"
+export HISTFILESIZE="2048"
 export HISTCONTROL="ignoreboth"
 export HISTIGNORE=exit:bg:fg:clear:pwd:ls:l:ll:history:top:w:env:jenv:reload
 
@@ -110,34 +110,29 @@ fi
 
 # load: chezmoi completion
 if has chezmoi; then
-  source <(chezmoi completion bash)
+  eval "$(chezmoi completion bash)"
 fi
 
-# load: rancher settings
-if [[ -d "$HOME/.rd" ]]; then
-  export PATH="$HOME/.rd/bin:$PATH"
-  export DOCKER_HOST="unix://$HOME/.rd/docker.sock"
-  source <("$HOME"/.rd/bin/rdctl completion bash)
-fi
-
-# load: docker settings
-if has docker; then
-  source <(docker completion bash)
-fi
+## load: rancher settings
+#if [[ -d "$HOME/.rd" ]]; then
+#  export PATH="$HOME/.rd/bin:$PATH"
+#  export DOCKER_HOST="unix://$HOME/.rd/docker.sock"
+#  eval "$("$HOME"/.rd/bin/rdctl completion bash)"
+#fi
+#
+## load: docker settings
+#if has docker; then
+#  eval "$(docker completion bash)"
+#fi
 
 # load: direnv settings
 if has direnv; then
-    source <(direnv hook bash)
+  eval "$(direnv hook bash)"
 fi
 
 # load: tools installed by mise
 if has mise; then
-  source <(mise activate bash)
-fi
-
-# load: cmux shell integration
-if [[ "${CMUX_SHELL_INTEGRATION:-0}" != "0" && -r "${CMUX_SHELL_INTEGRATION_DIR:-}/cmux-bash-integration.bash" ]]; then
-  source "$CMUX_SHELL_INTEGRATION_DIR/cmux-bash-integration.bash"
+  eval "$(mise activate bash)"
 fi
 
 # load: go settings
@@ -147,18 +142,13 @@ fi
 
 # load: uv settings
 if has uv; then
-  source <(uv generate-shell-completion bash)
+  eval "$(uv generate-shell-completion bash)"
   export PYTHONIOENCODING="UTF-8"
-fi
-
-# load: node settings
-if has node; then
-  export NODE_REPL_HISTORY_SIZE="32768"
 fi
 
 # load: npm settings
 if has npm; then
-  source <(npm completion)
+  eval "$(npm completion)"
 fi
 
 # load: aws settings
@@ -169,7 +159,7 @@ fi
 
 # load: lem completion
 if has lem; then
-  source <(lem completion bash)
+  eval "$(lem completion bash)"
 fi
 
 # optimize: PATH
