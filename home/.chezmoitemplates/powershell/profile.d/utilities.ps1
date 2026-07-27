@@ -23,11 +23,6 @@ function global:Push-UserDesktopDirectory {
   Push-Location -LiteralPath $__Default.Folder.Desktop
 }
 
-# cd ~/.repository
-function global:Push-UserRepositoryDirectory {
-  Push-Location -LiteralPath $__Default.Folder.Repository
-}
-
 # Return auto-sized current directory info
 function global:Get-UserAutoSizedDirectory {
   param (

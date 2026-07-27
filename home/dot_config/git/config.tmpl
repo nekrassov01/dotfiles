@@ -27,14 +27,14 @@
 [help]
 	autocorrect = 1
 [user]
-	name = {{ .github_username }}
-	email = {{ .github_email }}
-[includeIf "gitdir:{{ .chezmoi.homeDir }}/.repository/github.com/{{ .github_username }}/"]
-	path = {{ .chezmoi.homeDir }}/.config/git/config.{{ .github_username }}
-[includeIf "gitdir:{{ .chezmoi.homeDir }}/.repository/github.com/organization/"]
-	path = {{ .chezmoi.homeDir }}/.config/git/config.organization
+	name = {{ .github_personal_username }}
+	email = {{ .github_personal_email }}
+[includeIf "gitdir:{{ .repodir }}/github.com/{{ .github_personal_username }}/"]
+	path = {{ .chezmoi.homeDir }}/.config/git/config.personal
+[includeIf "gitdir:{{ .repodir }}/github.com/{{ .github_company_organization }}/"]
+	path = {{ .chezmoi.homeDir }}/.config/git/config.company
 [ghq]
-	root = {{ .chezmoi.homeDir }}/.repository
+root = {{ .repodir }}
 [hook "secretlint"]
 	event = pre-commit
 	command = mise run secretlint:pre-commit

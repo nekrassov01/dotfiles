@@ -40,10 +40,6 @@ for i in name email; do
 done
 unset def i
 
-if has ghq; then
-  git config --global ghq.root "~/.repository"
-fi
-
 # closing
 print_success "git configuration finished"
 echo

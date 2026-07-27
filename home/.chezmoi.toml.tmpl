@@ -1,5 +1,8 @@
-{{- $githubUsername := promptStringOnce . "github_username" "nekrassov01" -}}
-{{- $githubEmail := promptStringOnce . "github_email" "unclek62@gmail.com" -}}
+{{- $githubPersonalUsername := promptStringOnce . "github_username" "Set your personal GitHub username" -}}
+{{- $githubPersonalEmail := promptStringOnce . "github_email" "Set your personal GitHub email" -}}
+{{- $githubCompanyUsername := promptStringOnce . "github_username" "Set your company GitHub username" -}}
+{{- $githubCompanyEmail := promptStringOnce . "github_email" "Set your company GitHub email" -}}
+{{- $githubCompanyOrganization := promptStringOnce . "github_organization" "Set your company GitHub organization" -}}
 
 encryption = "age"
 
@@ -9,5 +12,9 @@ recipient = "age1xtpjfgu83g7lkxe33cz72424wpg5a53gn9e4mtxfess7hrcrx3sqld02h5"
 
 [data]
 work = {{ hasPrefix "kawashima" .chezmoi.hostname }}
-github_username = {{ $githubUsername | quote }}
-github_email = {{ $githubEmail | quote }}
+repodir = {{ joinPath .chezmoi.homeDir ".repository" | quote }}
+github_personal_username = {{ $githubPersonalUsername | quote }}
+github_personal_email = {{ $githubPersonalEmail | quote }}
+github_company_username = {{ $githubCompanyUsername | quote }}
+github_company_email = {{ $githubCompanyEmail | quote }}
+github_company_organization = {{ $githubCompanyOrganization | quote }}

@@ -15,7 +15,6 @@ $__Default.Folder = [ordered]@{}
 $__Default.Folder.Documents = [System.IO.Path]::Combine($HOME, 'Documents')
 $__Default.Folder.Downloads = [System.IO.Path]::Combine($HOME, 'Downloads')
 $__Default.Folder.Desktop = [System.IO.Path]::Combine($HOME, 'Desktop')
-$__Default.Folder.Repository = [System.IO.Path]::Combine($HOME, '.repository')
 $__Default.Folder.ModuleList = [System.IO.Path]::Combine($HOME, '.config', 'dotfiles', 'Pwshfile')
 
 if ($IsWindows) {
