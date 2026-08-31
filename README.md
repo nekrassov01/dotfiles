@@ -25,6 +25,15 @@ Set up the following in one shot:
 - macOS preferences
 - Pluggable task management via mise
 - Claude Code configuration
+- Custom test templates for gotests
+
+## gotests
+
+The custom test template omits per-case `before` and `after` hooks by default. Enable them when needed:
+
+```sh
+gotests -template_params '{"hooks":true}' [options] PATH ...
+```
 
 ## Todo
 

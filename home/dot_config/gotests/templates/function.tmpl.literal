@@ -1,5 +1,6 @@
 {{define "function"}}
 {{- $f := .}}
+{{- $withHooks := index .TemplateParams "hooks"}}
 
 func {{.TestName}}(t *testing.T) {
 	{{- with .Receiver}}
@@ -28,10 +29,12 @@ func {{.TestName}}(t *testing.T) {
 			isErr bool
 		{{- end}}
 	}
-	type hook struct {
-		before func()
-		after  func()
-	}
+	{{- if $withHooks}}
+		type hook struct {
+			before func()
+			after  func()
+		}
+	{{- end}}
 	tests := []struct {
 		name   string
 		{{- with .Receiver}}
@@ -45,20 +48,24 @@ func {{.TestName}}(t *testing.T) {
 			args args
 		{{- end}}
 		want want
-		hook hook
+		{{- if $withHooks}}
+			hook hook
+		{{- end}}
 	}{
 		// TODO: Add test cases.
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			if test.hook.before != nil {
-				test.hook.before()
-			}
-			defer func() {
-				if test.hook.after != nil {
-					test.hook.after()
+			{{- if $withHooks}}
+				if test.hook.before != nil {
+					test.hook.before()
 				}
-			}()
+				defer func() {
+					if test.hook.after != nil {
+						test.hook.after()
+					}
+				}()
+			{{- end}}
 			{{- with .Receiver}}
 				{{- if .IsStruct}}
 					{{Receiver .}} := {{if .Type.IsStar}}&{{end}}{{.Type.Value}}{
