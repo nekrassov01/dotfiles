@@ -29,6 +29,8 @@
 [user]
 	name = {{ .github_personal_username }}
 	email = {{ .github_personal_email }}
+[includeIf "gitdir:{{ .chezmoi.sourceDir }}/"]
+	path = {{ .chezmoi.homeDir }}/.config/git/config.personal
 [includeIf "gitdir:{{ .repodir }}/github.com/{{ .github_personal_username }}/"]
 	path = {{ .chezmoi.homeDir }}/.config/git/config.personal
 [includeIf "gitdir:{{ .repodir }}/github.com/{{ .github_company_organization }}/"]
