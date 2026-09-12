@@ -12,7 +12,7 @@ recipient = "age1xtpjfgu83g7lkxe33cz72424wpg5a53gn9e4mtxfess7hrcrx3sqld02h5"
 
 [data]
 work = {{ hasPrefix "kawashima" .chezmoi.hostname }}
-repodir = {{ joinPath .chezmoi.homeDir ".repository" | quote }}
+repodir = {{ joinPath .chezmoi.homeDir "dev" | quote }}
 github_personal_username = {{ $githubPersonalUsername | quote }}
 github_personal_email = {{ $githubPersonalEmail | quote }}
 github_company_username = {{ $githubCompanyUsername | quote }}
