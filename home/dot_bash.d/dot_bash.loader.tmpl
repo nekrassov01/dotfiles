@@ -113,6 +113,16 @@ if has chezmoi; then
   eval "$(chezmoi completion bash)"
 fi
 
+# load: gh completion
+if has gh; then
+  eval "$(gh completion --shell bash)"
+fi
+
+# load: herdr completion
+if has herdr; then
+  eval "$(herdr completion bash)"
+fi
+
 # load: docker settings
 if has docker; then
   eval "$(docker completion bash)"

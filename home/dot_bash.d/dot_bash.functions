@@ -32,7 +32,6 @@ fzghq() {
     [[ -n "$target" ]] || return
 
     local dir="$root/$target"
-    cd "$dir" || return
     if [[ "$key" == "ctrl-o" ]] && has code; then
         code "$dir"
     fi
