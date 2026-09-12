@@ -13,7 +13,9 @@
       "Read(**/*key)",
       "Read(**/*GITHUB_TOKEN*)",
       "Read(**/recovery-phrase)"
-    ]
+    ],
+    "defaultMode": "auto",
+    "blockReadsOutsideWorkingDirectories": true
   },
   "hooks": {
     "PreToolUse": [
@@ -61,29 +63,22 @@
     ]
   },
   "enabledPlugins": {
-    "aws-cdk-unit-testing@cdk-skills": true,
-    "aws-core@claude-plugins-official": true,
-    "aws-serverless@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "superpowers-developing-for-claude-code@superpowers-marketplace": true,
-    "superpowers@superpowers-marketplace": true
+    "gopls-lsp@claude-plugins-official": true,
+    "aws-cdk-unit-testing@cdk-skills": true
   },
   "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
     "cdk-skills": {
       "source": {
         "source": "github",
         "repo": "go-to-k/cdk-skills"
-      },
-      "autoUpdate": true
-    },
-    "superpowers-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers-marketplace"
-      },
-      "autoUpdate": true
+      }
     }
   },
   "language": "日本語"
