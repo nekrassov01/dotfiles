@@ -32,9 +32,10 @@ fzghq() {
     [[ -n "$target" ]] || return
 
     local dir="$root/$target"
-    cd "$dir" || return
-    if [[ "$key" == "ctrl-o" ]] && has code; then
-        code "$dir"
+    if [[ "$key" == "ctrl-o" ]]; then
+        "$EDITOR" "$dir"
+    else
+        cd "$dir" || return
     fi
     clear
 }
