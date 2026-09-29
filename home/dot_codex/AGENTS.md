@@ -3,8 +3,9 @@
 ## Principles
 
 - Precedence (highest first): org-managed settings, project-specific rules, this guide.
-- Make the minimal diff. Without an explicit request, do not undertake large refactors, structural changes, or scope expansion; propose them instead. Do not alter existing structure unless it is the cause of the problem.
+- Prioritize codebase-wide consistency over minimal diffs.
 - Do not add speculative behavior or features. Resolve all ambiguity during planning by asking questions; once the plan is confirmed, execute without interruption.
+- Obtain agreement before sacrificing an existing quality to improve another.
 
 ## Language
 
@@ -39,6 +40,7 @@ Please explain using simple, everyday language. Do not try to simplify your expl
 
 ### Design
 
+- Understand the existing design and its context before changing code.
 - Prioritize correctness and safety.
 - Use symmetry as a design criterion: align naming, structure, paired operations, and statement order.
 - Do not build features or abstractions until needed.
@@ -69,10 +71,11 @@ Please explain using simple, everyday language. Do not try to simplify your expl
 ### Verification
 
 - Verify by running, testing, or static analysis before completing a change. State what is unverified; do not close with "it should work."
+- Verify effects on existing behavior. For changes that may affect performance, measure execution time and memory allocations before and after the change.
 
 ### Reviewing
 
-- Write in the order problem → reason → smallest fix. Do not soften the problem with vague agreement.
+- Write in the order problem → reason → fix. Do not soften the problem with vague agreement.
 
 ## Documentation conventions
 
