@@ -14,7 +14,8 @@ Review the pull request at `$ARGUMENTS` (a GitHub pull request URL) and record o
    - Check that the active account matches the repository owner when several accounts are logged in. Suggest `gh auth switch --user <name>` if not.
 2. Resolve the target.
    - Parse owner, repository, and PR number from the URL.
-   - Confirm the current directory is a clone of that repository (`git remote -v`). If not, stop and ask where to run.
+   - Find a clone of that repository by `git remote -v`. Check the current directory first, then the session's additional working directories and sibling directories (multi-repo workspaces such as vmr or Zed aggregate clones outside the current directory). Run every git command in that clone.
+   - Stop and ask where to run only when no clone matches or several do.
    - Run `gh pr view <url> --json number,title,body,author,baseRefName,headRefName,state,files,additions,deletions`.
 3. Read the change statically.
    - `git fetch origin <base> <head>` and diff with `git diff origin/<base>...origin/<head>`.
