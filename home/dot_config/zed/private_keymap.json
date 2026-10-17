@@ -1,0 +1,13 @@
+[
+  {
+    "bindings": {
+      "ctrl-shift-alt-j": "agent::FocusAgent",
+      "ctrl-shift-alt-k": "workspace::FocusCenterPane",
+      "ctrl-shift-alt-l": "terminal_panel::ToggleFocus",
+      "ctrl-shift-alt-up": "multi_workspace::PreviousThread",
+      "ctrl-shift-alt-down": "multi_workspace::NextThread",
+      "ctrl-shift-alt-left": "project_panel::ToggleFocus",
+      "ctrl-shift-alt-right": "git_panel::ToggleFocus"
+    }
+  }
+]
