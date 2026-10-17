@@ -4,6 +4,7 @@ be5invis.toml
 bierner.markdown-preview-github-styles
 boto3typed.boto3-ide
 bradlc.vscode-tailwindcss
+charliermarsh.ruff
 christian-kohler.npm-intellisense
 christian-kohler.path-intellisense
 davidanson.vscode-markdownlint
@@ -44,4 +45,5 @@ usernamehw.errorlens
 vector-of-bool.gitflow
 vue.volar
 wayou.vscode-todo-highlight
+wholroyd.jinja
 yzhang.markdown-all-in-one
