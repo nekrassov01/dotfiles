@@ -20,7 +20,7 @@ Set up the following in one shot:
 - Git setup, including config-based pre-commit hooks
 - Homebrew package management
 - mise runtime and task management
-- VS Code settings and extension management
+- Zed settings and keymap management
 - PowerShell setup and configuration
 - macOS preferences
 - Pluggable task management via mise

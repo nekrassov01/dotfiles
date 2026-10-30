@@ -15,10 +15,9 @@ brewfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Brewfile")"
 uvfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Uvfile")"
 nodefile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Nodefile")"
 dockfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Dockfile")"
-codefile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Codefile")"
 pwshfile="$(chezmoi source-path "$config_dir/dotfiles/manifests/Pwshfile")"
 
-# get module lists by package manager tools: brew, uv, node, pwsh (homemade), code, and dock
+# get module lists by package manager tools: brew, uv, node, pwsh (homemade), and dock
 # NOTE: mise runtimes are managed declaratively in ~/.config/mise/config.toml.
 get_bundle() {
 
@@ -58,15 +57,6 @@ get_bundle() {
     fi
   fi
 
-  # vscode extensions dump
-  if has code; then
-    print_info "Bundling code -> $(color green)$codefile$(color reset)"
-    mkdir -p "$(dirname "$codefile")"
-    if ! code --list-extensions >"$codefile"; then
-      print_err "Bundling code failed."
-    fi
-  fi
-
   # dock items dump
   if has dockutil; then
     print_info "Bundling dock -> $(color green)$dockfile$(color reset)"
@@ -83,7 +73,7 @@ get_bundle
 
 # display result
 echo
-for f in "$brewfile" "$uvfile" "$nodefile" "$pwshfile" "$codefile" "$dockfile"; do
+for f in "$brewfile" "$uvfile" "$nodefile" "$pwshfile" "$dockfile"; do
   [ -f "$f" ] && print_success "Bundled: $f"
 done
 

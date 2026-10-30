@@ -93,12 +93,6 @@ setalias() {
     alias awsconf='aws configure list'
   fi
 
-  # code
-  if has code; then
-    alias codeext='code --list-extensions'
-    alias codehome='code $HOME'
-  fi
-
   # docker
   if has docker; then
     alias dockerclean='docker system prune -af --volumes'
